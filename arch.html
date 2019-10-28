@@ -1,0 +1,1183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-10-27 Sun 17:00 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>arch/os stuff</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="frederic.boilea" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">arch/os stuff</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org1758527">1. myconf</a>
+<ul>
+<li><a href="#org7bd8bcf">1.1. i3</a>
+<ul>
+<li><a href="#orga2f79e1">1.1.1. main conf</a></li>
+<li><a href="#orgae36d35">1.1.2. status bar</a></li>
+</ul>
+</li>
+<li><a href="#orgebea300">1.2. mpd</a>
+<ul>
+<li><a href="#org4d66ad5">1.2.1. basic file setup</a></li>
+<li><a href="#org1fecdfa">1.2.2. general system options</a></li>
+<li><a href="#org8e39295">1.2.3. notlive</a></li>
+</ul>
+</li>
+<li><a href="#orgd09d2b7">1.3. termite</a></li>
+<li><a href="#orgb9c1e37">1.4. zsh</a></li>
+<li><a href="#org59f60ca">1.5. compton</a></li>
+<li><a href="#orgeb59743">1.6. aliases</a></li>
+<li><a href="#org4e1f243">1.7. <span class="todo TODO">TODO</span> ranger</a></li>
+</ul>
+</li>
+<li><a href="#org474cea2">2. packages</a>
+<ul>
+<li><a href="#orgb5c73e9">2.1. livecli&#xa0;&#xa0;&#xa0;<span class="tag"><span class="aur">aur</span></span></a></li>
+</ul>
+</li>
+<li><a href="#org4556700">3. fonts</a>
+<ul>
+<li><a href="#org78c7362">3.1. sample pkgbuild</a></li>
+<li><a href="#org2d6131e">3.2. my sample pkgbuild</a></li>
+</ul>
+</li>
+<li><a href="#org8d2c71e">4. pacman</a></li>
+<li><a href="#org4d1d418">5. ress</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1758527" class="outline-2">
+<h2 id="org1758527"><span class="section-number-2">1</span> myconf</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org7bd8bcf" class="outline-3">
+<h3 id="org7bd8bcf"><span class="section-number-3">1.1</span> i3</h3>
+<div class="outline-text-3" id="text-1-1">
+</div>
+<div id="outline-container-orga2f79e1" class="outline-4">
+<h4 id="orga2f79e1"><span class="section-number-4">1.1.1</span> main conf</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<div class="org-src-container">
+<pre class="src src-conf"><span style="color: #513C44;"># </span><span style="color: #513C44;">i3 config file for frederic boileau</span>
+<span style="color: #513C44;">#</span>
+exec source ~/.profile
+exec source ~/.bashrc.aliases
+
+set $mod Mod4
+<span style="color: #9d81ba;">for_window [class</span>=<span style="color: #80bcb6;">".*"</span>] border pixel <span style="color: #eed891;">4</span>
+font pango:monospace <span style="color: #eed891;">10</span>
+font pango: Hack, FontAwesome <span style="color: #eed891;">15</span>
+gaps inner <span style="color: #eed891;">15</span>
+gaps outer <span style="color: #eed891;">15</span>
+set $term termite
+set $shell /usr/bin/zsh
+<span style="color: #513C44;">#</span><span style="color: #513C44;">set $browser brave</span>
+exec_always feh --bg-scale <span style="color: #80bcb6;">"/home/gaston/pics/wallpapers/blue-and-dark-sky-by-mark-kirkpatrick-3840&#215;2160.jpg"</span>
+exec xmodmap ~/.xmodmap
+
+
+exec source ~/.bashrc
+exec source ~/.zshrc
+exec source ~/.profile
+
+exec unclutter
+
+bindsym $mod+Tab workspace next
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+e exec <span style="color: #80bcb6;">"emacsclient -c"</span>
+bindsym $mod+q kill
+bindsym $mod+Shift+q exec <span style="color: #80bcb6;">"i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i2? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"</span>
+
+<span style="color: #513C44;">###</span><span style="color: #513C44;">---Basic definitions---###</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">Use Mouse+$mod to drag floating windows to their wanted position</span>
+bindsym $mod+Return exec termite
+<span style="color: #513C44;"># </span><span style="color: #513C44;">start dmenu (a program launcher)</span>
+<span style="color: #513C44;">#</span><span style="color: #513C44;">bindsym $mod+d exec dmenu_run</span>
+bindsym $mod+d exec --no-startup-id rofi -show run
+bindsym $mod+w exec --no-startup-id rofi -show window
+
+
+
+bindsym $mod+Shift+b exec ~/apps/i3-focus-last switch
+exec --no-startup-id <span style="color: #80bcb6;">"~/apps/i3-focus-last"</span>
+
+
+<span style="color: #513C44;"># </span><span style="color: #513C44;">change focus</span>
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+bindsym $mod+Shift+h move left <span style="color: #eed891;">20</span>
+bindsym $mod+Shift+j move down <span style="color: #eed891;">20</span>
+bindsym $mod+Shift+k move up <span style="color: #eed891;">20</span>
+bindsym $mod+Shift+l move right <span style="color: #eed891;">19</span>
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+bindsym $mod+O split vertical
+bindsym $mod+P split horizontal
+bindsym $mod+f fullscreen toggle
+bindsym $mod+s layout stacking
+bindsym $mod+t layout tabbed
+bindsym $mod+e layout toggle split
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+bindsym $mod+u focus parent
+bindsym $mod+semicolon focus child
+
+set $ws1 <span style="color: #80bcb6;">"1"</span>
+set $ws2 <span style="color: #80bcb6;">"2"</span>
+set $ws3 <span style="color: #80bcb6;">"3"</span>
+set $ws4 <span style="color: #80bcb6;">"4"</span>
+set $ws5 <span style="color: #80bcb6;">"5:reading"</span>
+set $ws6 <span style="color: #80bcb6;">"6:media-proc"</span>
+set $ws7 <span style="color: #80bcb6;">"7:ssh"</span>
+set $ws8 <span style="color: #80bcb6;">"8:background"</span>
+set $ws9 <span style="color: #80bcb6;">"9:main"</span>
+set $ws10 <span style="color: #80bcb6;">"10:prog"</span>
+
+bindsym $mod+b workspace back_and_forth
+<span style="color: #513C44;">#</span><span style="color: #513C44;">bindsym $mod+Shift+b move container to workspace back_and_forth</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">switch to workspace</span>
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+
+<span style="color: #513C44;"># </span><span style="color: #513C44;">move focused container to workspace</span>
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10
+
+<span style="color: #513C44;"># </span><span style="color: #513C44;">resize window (you can also use the mouse for that)</span>
+<span style="color: #709688;">mode </span><span style="color: #709688;">"resize"</span> {
+<span style="color: #513C44;"># </span><span style="color: #513C44;">These bindings trigger as soon as you enter the resize mode</span>
+
+<span style="color: #513C44;"># </span><span style="color: #513C44;">Pressing left will shrink the window&#8217;s width.</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">Pressing right will grow the window&#8217;s width.</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">Pressing up will shrink the window&#8217;s height.</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">Pressing down will grow the window&#8217;s height.</span>
+    bindsym h resize shrink width <span style="color: #eed891;">10</span> px or <span style="color: #eed891;">10</span> ppt
+        bindsym j resize grow height <span style="color: #eed891;">10</span> px or <span style="color: #eed891;">10</span> ppt
+        bindsym k resize shrink height <span style="color: #eed891;">10</span> px or <span style="color: #eed891;">10</span> ppt
+        bindsym l resize grow width <span style="color: #eed891;">10</span> px or <span style="color: #eed891;">10</span> ppt
+
+<span style="color: #513C44;"># </span><span style="color: #513C44;">same bindings, but for the arrow keys</span>
+        bindsym Left resize shrink width <span style="color: #eed891;">10</span> px or <span style="color: #eed891;">10</span> ppt
+        bindsym Down resize grow height <span style="color: #eed891;">10</span> px or <span style="color: #eed891;">10</span> ppt
+        bindsym Up resize shrink height <span style="color: #eed891;">10</span> px or <span style="color: #eed891;">10</span> ppt
+        bindsym Right resize grow width <span style="color: #eed891;">10</span> px or <span style="color: #eed891;">10</span> ppt
+
+<span style="color: #513C44;"># </span><span style="color: #513C44;">back to normal: Enter or Escape or $mod+r</span>
+        bindsym Return mode <span style="color: #80bcb6;">"default"</span>
+        bindsym Escape mode <span style="color: #80bcb6;">"default"</span>
+        bindsym $mod+r mode <span style="color: #80bcb6;">"default"</span>
+}
+
+bindsym $mod+r mode <span style="color: #80bcb6;">"resize"</span>
+
+set $mode_gaps Gaps: (o)uter, (i)nner, (h)orizontal, (v)ertical, (t)op, (r)ight, (b)ottom, (l)eft
+set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_horiz Horizontal Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_verti Vertical Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_top Top Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_right Right Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_bottom Bottom Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_left Left Gaps: +|-|0 (local), Shift + +|-|0 (global)
+bindsym $mod+Shift+g mode <span style="color: #80bcb6;">"$mode_gaps"</span>
+
+<span style="color: #709688;">mode </span><span style="color: #709688;">"$mode_gaps"</span> {
+    bindsym o      mode <span style="color: #80bcb6;">"$mode_gaps_outer"</span>
+        bindsym i      mode <span style="color: #80bcb6;">"$mode_gaps_inner"</span>
+        bindsym h      mode <span style="color: #80bcb6;">"$mode_gaps_horiz"</span>
+        bindsym v      mode <span style="color: #80bcb6;">"$mode_gaps_verti"</span>
+        bindsym t      mode <span style="color: #80bcb6;">"$mode_gaps_top"</span>
+        bindsym r      mode <span style="color: #80bcb6;">"$mode_gaps_right"</span>
+        bindsym b      mode <span style="color: #80bcb6;">"$mode_gaps_bottom"</span>
+        bindsym l      mode <span style="color: #80bcb6;">"$mode_gaps_left"</span>
+        bindsym Return mode <span style="color: #80bcb6;">"$mode_gaps"</span>
+        bindsym Escape mode <span style="color: #80bcb6;">"default"</span>
+}
+
+<span style="color: #709688;">mode </span><span style="color: #709688;">"$mode_gaps_outer"</span> {
+    bindsym plus  gaps outer current plus <span style="color: #eed891;">5</span>
+        bindsym minus gaps outer current minus <span style="color: #eed891;">5</span>
+        bindsym <span style="color: #eed891;">0</span>     gaps outer current set <span style="color: #eed891;">0</span>
+
+        bindsym Shift+plus  gaps outer all plus <span style="color: #eed891;">5</span>
+        bindsym Shift+minus gaps outer all minus <span style="color: #eed891;">5</span>
+        bindsym Shift+0     gaps outer all set <span style="color: #eed891;">0</span>
+
+        bindsym Return mode <span style="color: #80bcb6;">"$mode_gaps"</span>
+        bindsym Escape mode <span style="color: #80bcb6;">"default"</span>
+}
+<span style="color: #709688;">mode </span><span style="color: #709688;">"$mode_gaps_inner"</span> {
+    bindsym plus  gaps inner current plus <span style="color: #eed891;">5</span>
+        bindsym minus gaps inner current minus <span style="color: #eed891;">5</span>
+        bindsym <span style="color: #eed891;">0</span>     gaps inner current set <span style="color: #eed891;">0</span>
+
+        bindsym Shift+plus  gaps inner all plus <span style="color: #eed891;">5</span>
+        bindsym Shift+minus gaps inner all minus <span style="color: #eed891;">5</span>
+        bindsym Shift+0     gaps inner all set <span style="color: #eed891;">0</span>
+
+        bindsym Return mode <span style="color: #80bcb6;">"$mode_gaps"</span>
+        bindsym Escape mode <span style="color: #80bcb6;">"default"</span>
+}
+<span style="color: #709688;">mode </span><span style="color: #709688;">"$mode_gaps_horiz"</span> {
+    bindsym plus  gaps horizontal current plus <span style="color: #eed891;">5</span>
+        bindsym minus gaps horizontal current minus <span style="color: #eed891;">5</span>
+        bindsym <span style="color: #eed891;">0</span>     gaps horizontal current set <span style="color: #eed891;">0</span>
+
+        bindsym Shift+plus  gaps horizontal all plus <span style="color: #eed891;">5</span>
+        bindsym Shift+minus gaps horizontal all minus <span style="color: #eed891;">5</span>
+        bindsym Shift+0     gaps horizontal all set <span style="color: #eed891;">0</span>
+
+        bindsym Return mode <span style="color: #80bcb6;">"$mode_gaps"</span>
+        bindsym Escape mode <span style="color: #80bcb6;">"default"</span>
+}
+<span style="color: #709688;">mode </span><span style="color: #709688;">"$mode_gaps_verti"</span> {
+    bindsym plus  gaps vertical current plus <span style="color: #eed891;">5</span>
+        bindsym minus gaps vertical current minus <span style="color: #eed891;">5</span>
+        bindsym <span style="color: #eed891;">0</span>     gaps vertical current set <span style="color: #eed891;">0</span>
+
+        bindsym Shift+plus  gaps vertical all plus <span style="color: #eed891;">5</span>
+        bindsym Shift+minus gaps vertical all minus <span style="color: #eed891;">5</span>
+        bindsym Shift+0     gaps vertical all set <span style="color: #eed891;">0</span>
+
+        bindsym Return mode <span style="color: #80bcb6;">"$mode_gaps"</span>
+        bindsym Escape mode <span style="color: #80bcb6;">"default"</span>
+}
+<span style="color: #709688;">mode </span><span style="color: #709688;">"$mode_gaps_top"</span> {
+    bindsym plus  gaps top current plus <span style="color: #eed891;">5</span>
+        bindsym minus gaps top current minus <span style="color: #eed891;">5</span>
+        bindsym <span style="color: #eed891;">0</span>     gaps top current set <span style="color: #eed891;">0</span>
+
+        bindsym Shift+plus  gaps top all plus <span style="color: #eed891;">5</span>
+        bindsym Shift+minus gaps top all minus <span style="color: #eed891;">5</span>
+        bindsym Shift+0     gaps top all set <span style="color: #eed891;">0</span>
+
+        bindsym Return mode <span style="color: #80bcb6;">"$mode_gaps"</span>
+        bindsym Escape mode <span style="color: #80bcb6;">"default"</span>
+}
+<span style="color: #709688;">mode </span><span style="color: #709688;">"$mode_gaps_right"</span> {
+    bindsym plus  gaps right current plus <span style="color: #eed891;">5</span>
+        bindsym minus gaps right current minus <span style="color: #eed891;">5</span>
+        bindsym <span style="color: #eed891;">0</span>     gaps right current set <span style="color: #eed891;">0</span>
+
+        bindsym Shift+plus  gaps right all plus <span style="color: #eed891;">5</span>
+        bindsym Shift+minus gaps right all minus <span style="color: #eed891;">5</span>
+        bindsym Shift+0     gaps right all set <span style="color: #eed891;">0</span>
+
+        bindsym Return mode <span style="color: #80bcb6;">"$mode_gaps"</span>
+        bindsym Escape mode <span style="color: #80bcb6;">"default"</span>
+}
+<span style="color: #709688;">mode </span><span style="color: #709688;">"$mode_gaps_bottom"</span> {
+    bindsym plus  gaps bottom current plus <span style="color: #eed891;">5</span>
+        bindsym minus gaps bottom current minus <span style="color: #eed891;">5</span>
+        bindsym <span style="color: #eed891;">0</span>     gaps bottom current set <span style="color: #eed891;">0</span>
+
+        bindsym Shift+plus  gaps bottom all plus <span style="color: #eed891;">5</span>
+        bindsym Shift+minus gaps bottom all minus <span style="color: #eed891;">5</span>
+        bindsym Shift+0     gaps bottom all set <span style="color: #eed891;">0</span>
+
+        bindsym Return mode <span style="color: #80bcb6;">"$mode_gaps"</span>
+        bindsym Escape mode <span style="color: #80bcb6;">"default"</span>
+}
+<span style="color: #709688;">mode </span><span style="color: #709688;">"$mode_gaps_left"</span> {
+    bindsym plus  gaps left current plus <span style="color: #eed891;">5</span>
+        bindsym minus gaps left current minus <span style="color: #eed891;">5</span>
+        bindsym <span style="color: #eed891;">0</span>     gaps left current set <span style="color: #eed891;">0</span>
+
+        bindsym Shift+plus  gaps left all plus <span style="color: #eed891;">5</span>
+        bindsym Shift+minus gaps left all minus <span style="color: #eed891;">5</span>
+        bindsym Shift+0     gaps left all set <span style="color: #eed891;">0</span>
+
+        bindsym Return mode <span style="color: #80bcb6;">"$mode_gaps"</span>
+        bindsym Escape mode <span style="color: #80bcb6;">"default"</span>
+}
+
+<span style="color: #709688;">bar</span> {
+    font pango:DejaVu Sans Mono, FontAwesome <span style="color: #eed891;">12</span>
+        position top
+        tray_output DP-1
+
+        status_command i3status
+}
+set $Locker i3lock &amp;&amp; sleep <span style="color: #eed891;">1</span>
+
+set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
+<span style="color: #709688;">mode </span><span style="color: #709688;">"$mode_system"</span> {
+    bindsym l exec --no-startup-id $Locker, mode <span style="color: #80bcb6;">"default"</span>
+        bindsym e exec --no-startup-id i3-msg exit, mode <span style="color: #80bcb6;">"default"</span>
+        bindsym s exec --no-startup-id $Locker &amp;&amp; systemctl suspend, mode <span style="color: #80bcb6;">"default"</span>
+        bindsym h exec --no-startup-id $Locker &amp;&amp; systemctl hibernate, mode <span style="color: #80bcb6;">"default"</span>
+        bindsym r exec --no-startup-id systemctl reboot, mode <span style="color: #80bcb6;">"default"</span>
+        bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode <span style="color: #80bcb6;">"default"</span>
+
+<span style="color: #513C44;"># </span><span style="color: #513C44;">back to normal: Enter or Escape</span>
+        bindsym Return mode <span style="color: #80bcb6;">"default"</span>
+        bindsym Escape mode <span style="color: #80bcb6;">"default"</span>
+}
+
+bindsym $mod+Shift+s mode <span style="color: #80bcb6;">"$mode_system"</span>
+exec xautolock -time <span style="color: #eed891;">20</span> -locker <span style="color: #80bcb6;">"i3lock -i '~/Pictures/rain2.jpg' &amp;"</span>
+
+
+
+
+<span style="color: #513C44;"># </span><span style="color: #513C44;">class                 border  bground text    indicator child_border</span>
+client.focused          <span style="color: #513C44;">#</span><span style="color: #513C44;">6272A4 #6272A4 #F8F8F2 #6272A4   #6272A4</span>
+client.focused_inactive <span style="color: #513C44;">#</span><span style="color: #513C44;">44475A #44475A #F8F8F2 #44475A   #44475A</span>
+client.unfocused        <span style="color: #513C44;">#</span><span style="color: #513C44;">282A36 #282A36 #BFBFBF #282A36   #282A36</span>
+client.urgent           <span style="color: #513C44;">#</span><span style="color: #513C44;">44475A #FF5555 #F8F8F2 #FF5555   #FF5555</span>
+client.placeholder      <span style="color: #513C44;">#</span><span style="color: #513C44;">282A36 #282A36 #F8F8F2 #282A36   #282A36</span>
+
+client.background       <span style="color: #513C44;">#</span><span style="color: #513C44;">F8F8F2</span>
+
+<span style="color: #709688;">bar</span> {
+  <span style="color: #709688;">colors</span> {
+    background <span style="color: #513C44;">#</span><span style="color: #513C44;">282A36</span>
+    statusline <span style="color: #513C44;">#</span><span style="color: #513C44;">F8F8F2</span>
+    separator  <span style="color: #513C44;">#</span><span style="color: #513C44;">44475A</span>
+
+    focused_workspace  <span style="color: #513C44;">#</span><span style="color: #513C44;">44475A #44475A #F8F8F2</span>
+    active_workspace   <span style="color: #513C44;">#</span><span style="color: #513C44;">282A36 #44475A #F8F8F2</span>
+    inactive_workspace <span style="color: #513C44;">#</span><span style="color: #513C44;">282A36 #282A36 #BFBFBF</span>
+    urgent_workspace   <span style="color: #513C44;">#</span><span style="color: #513C44;">FF5555 #FF5555 #F8F8F2</span>
+    binding_mode       <span style="color: #513C44;">#</span><span style="color: #513C44;">FF5555 #FF5555 #F8F8F2</span>
+  }
+}
+
+
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgae36d35" class="outline-4">
+<h4 id="orgae36d35"><span class="section-number-4">1.1.2</span> status bar</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<div class="org-src-container">
+<pre class="src src-conf"><span style="color: #709688;">general</span> {
+        <span style="color: #9d81ba;">output_format</span> = <span style="color: #80bcb6;">"i3bar"</span>
+        <span style="color: #9d81ba;">colors</span> = false
+        <span style="color: #9d81ba;">markup</span> = pango
+        <span style="color: #9d81ba;">interval</span> = <span style="color: #eed891;">5</span>
+        <span style="color: #9d81ba;">color_good</span> = <span style="color: #80bcb6;">'#2f343f'</span>
+    <span style="color: #9d81ba;">color_degraded</span> = <span style="color: #80bcb6;">'#ebcb8b'</span>
+    <span style="color: #9d81ba;">color_bad</span> = <span style="color: #80bcb6;">'#ba5e57'</span>
+}
+
+<span style="color: #9d81ba;">order +</span>= <span style="color: #80bcb6;">"cpu_usage"</span>
+<span style="color: #9d81ba;">order +</span>= <span style="color: #80bcb6;">"load"</span>
+<span style="color: #9d81ba;">order +</span>= <span style="color: #80bcb6;">"cpu_temperature 0"</span>
+<span style="color: #9d81ba;">order +</span>= <span style="color: #80bcb6;">"disk /"</span>
+<span style="color: #9d81ba;">order +</span>= <span style="color: #80bcb6;">"disk /home"</span>
+<span style="color: #9d81ba;">order +</span>= <span style="color: #80bcb6;">"ethernet eno1"</span>
+<span style="color: #9d81ba;">order +</span>= <span style="color: #80bcb6;">"volume master"</span>
+<span style="color: #9d81ba;">order +</span>= <span style="color: #80bcb6;">"tztime local"</span>
+
+
+<span style="color: #709688;">cpu_usage</span> {
+        <span style="color: #9d81ba;">format</span> = <span style="color: #80bcb6;">"&lt;span background='#a29bfe'&gt; usage CPU_0: %cpu0 CPU_1: %cpu1  &lt;/span&gt;"</span>
+}
+<span style="color: #709688;">load</span> {
+        <span style="color: #9d81ba;">format</span> = <span style="color: #80bcb6;">"&lt;span background='#f59335'&gt; &#59648; %5min Load &lt;/span&gt;"</span>
+}
+
+<span style="color: #709688;">cpu_temperature </span><span style="color: #709688;">0</span> {
+        <span style="color: #9d81ba;">format</span> = <span style="color: #80bcb6;">"&lt;span background='#bf616a'&gt; &#59784; %degrees &#176;C &lt;/span&gt;"</span>
+        <span style="color: #9d81ba;">path</span> = <span style="color: #80bcb6;">"/sys/class/thermal/thermal_zone0/temp"</span>
+}
+
+<span style="color: #709688;">disk </span><span style="color: #709688;">"/"</span> {
+        <span style="color: #9d81ba;">format</span> = <span style="color: #80bcb6;">"&lt;span background='#fec7cd'&gt; &#59719; %free Free &lt;/span&gt;"</span>
+}
+
+<span style="color: #709688;">disk </span><span style="color: #709688;">"/home"</span> {
+        <span style="color: #9d81ba;">format</span> = <span style="color: #80bcb6;">"&lt;span background='#a1d569'&gt; &#59717; %free Free &lt;/span&gt;"</span>
+}
+
+<span style="color: #709688;">ethernet eno1</span> {
+        <span style="color: #9d81ba;">format_up</span> = <span style="color: #80bcb6;">"&lt;span background='#88c0d0'&gt; &#59649; %ip &lt;/span&gt;"</span>
+        <span style="color: #9d81ba;">format_down</span> = <span style="color: #80bcb6;">"&lt;span background='#88c0d0'&gt; &#59649; Disconnected &lt;/span&gt;"</span>
+}
+
+
+<span style="color: #709688;">volume master</span> {
+        <span style="color: #9d81ba;">format</span> = <span style="color: #80bcb6;">"&lt;span background='#ebcb8b'&gt; &#61480; %volume &lt;/span&gt;"</span>
+        <span style="color: #9d81ba;">format_muted</span> = <span style="color: #80bcb6;">"&lt;span background='#ebcb8b'&gt; &#59668; Muted &lt;/span&gt;"</span>
+        <span style="color: #9d81ba;">device</span> = <span style="color: #80bcb6;">"default"</span>
+        <span style="color: #9d81ba;">mixer</span> = <span style="color: #80bcb6;">"Master"</span>
+        <span style="color: #9d81ba;">mixer_idx</span> = <span style="color: #eed891;">0</span>
+}
+
+
+<span style="color: #709688;">tztime local</span> {
+    <span style="color: #9d81ba;">format</span> = <span style="color: #80bcb6;">"&lt;span background='#81a1c1'&gt; %time &lt;/span&gt;"</span>
+    <span style="color: #9d81ba;">format_time</span> = <span style="color: #80bcb6;">"&#59687; %a %-d %b %H:%M"</span>
+}
+
+<span style="color: #709688;">general</span> {
+  <span style="color: #9d81ba;">output_format</span> = <span style="color: #80bcb6;">"i3bar"</span>
+  <span style="color: #9d81ba;">colors</span> = true
+  <span style="color: #9d81ba;">color_good</span> = <span style="color: #80bcb6;">"#50FA7B"</span>
+  <span style="color: #9d81ba;">color_degraded</span> = <span style="color: #80bcb6;">"#F1FA8C"</span>
+  <span style="color: #9d81ba;">color_bad</span> = <span style="color: #80bcb6;">"#FF5555"</span>
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgebea300" class="outline-3">
+<h3 id="orgebea300"><span class="section-number-3">1.2</span> mpd</h3>
+<div class="outline-text-3" id="text-1-2">
+</div>
+<div id="outline-container-org4d66ad5" class="outline-4">
+<h4 id="org4d66ad5"><span class="section-number-4">1.2.1</span> basic file setup</h4>
+<div class="outline-text-4" id="text-1-2-1">
+<div class="org-src-container">
+<pre class="src src-conf">music_directory   <span style="color: #80bcb6;">"~/tallboi_real/musicmusic/"</span>
+playlist_directory    <span style="color: #80bcb6;">"~/.mpd/playlists"</span>
+db_file     <span style="color: #80bcb6;">"~/.mpd/database"</span>
+log_file      <span style="color: #80bcb6;">"~/.mpd/log"</span>
+pid_file      <span style="color: #80bcb6;">"~/.mpd/pid"</span>
+state_file      <span style="color: #80bcb6;">"~/.mpd/state"</span>
+sticker_file      <span style="color: #80bcb6;">"~/.mpd/sticker.sql"</span>
+filesystem_charset    <span style="color: #80bcb6;">"UTF-8"</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1fecdfa" class="outline-4">
+<h4 id="org1fecdfa"><span class="section-number-4">1.2.2</span> general system options</h4>
+<div class="outline-text-4" id="text-1-2-2">
+<div class="org-src-container">
+<pre class="src src-conf"><span style="color: #513C44;"># </span><span style="color: #513C44;">For network</span>
+bind_to_address   <span style="color: #80bcb6;">"127.0.0.1"</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">And for Unix Socket</span>
+bind_to_address   <span style="color: #80bcb6;">"~/.mpd/socket"</span>
+port        <span style="color: #80bcb6;">"6600"</span>
+log_level     <span style="color: #80bcb6;">"default"</span>
+restore_paused <span style="color: #80bcb6;">"no"</span>
+<span style="color: #513C44;">#</span><span style="color: #513C44;">save_absolute_paths_in_playlists "no"</span>
+metadata_to_use  <span style="color: #80bcb6;">"artist,album,title,track,name,genre,date,composer,performer,disc"</span>
+<span style="color: #513C44;">#</span><span style="color: #513C44;">metadata_to_use "+comment"</span>
+auto_update <span style="color: #80bcb6;">"yes"</span>
+auto_update_depth <span style="color: #80bcb6;">"10"</span>
+<span style="color: #513C44;">#</span><span style="color: #513C44;">follow_outside_symlinks  "yes"</span>
+<span style="color: #513C44;">#</span><span style="color: #513C44;">follow_inside_symlinks   "yes"</span>
+zeroconf_enabled    <span style="color: #80bcb6;">"yes"</span>
+zeroconf_name     <span style="color: #80bcb6;">"Music Player @ %h"</span>
+
+<span style="color: #709688;">audio_output</span> {
+type    <span style="color: #80bcb6;">"pulse"</span>
+name    <span style="color: #80bcb6;">"My Pulse Output"</span>
+<span style="color: #513C44;">##  </span><span style="color: #513C44;">server    "remote_server"   # optional</span>
+<span style="color: #513C44;">##  </span><span style="color: #513C44;">sink    "remote_server_sink"  # optional</span>
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org8e39295" class="outline-4">
+<h4 id="org8e39295"><span class="section-number-4">1.2.3</span> notlive</h4>
+<div class="outline-text-4" id="text-1-2-3">
+</div>
+<ol class="org-ol">
+<li><a id="orge900e4c"></a>examples of audio output<br />
+<ol class="org-ol">
+<li><a id="orgbe10c31"></a>alsa<br />
+<div class="outline-text-6" id="text-1-2-3-1-1">
+<div class="org-src-container">
+<pre class="src src-conf" id="org791535a"><span style="color: #709688;">audio_output</span> {
+type                    <span style="color: #80bcb6;">"alsa"</span>
+name                    <span style="color: #80bcb6;">"Sound Card"</span>
+options                 <span style="color: #80bcb6;">"dev=dmixer"</span>
+device                  <span style="color: #80bcb6;">"plug:dmix"</span>
+}
+<span style="color: #709688;">audio_output</span> {
+type    <span style="color: #80bcb6;">"alsa"</span>
+name    <span style="color: #80bcb6;">"My ALSA Device"</span>
+device    <span style="color: #80bcb6;">"hw:0,0"</span>  <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+mixer_type      <span style="color: #80bcb6;">"hardware"</span>  <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+mixer_device  <span style="color: #80bcb6;">"default"</span> <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+mixer_control <span style="color: #80bcb6;">"PCM"</span>   <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+mixer_index <span style="color: #80bcb6;">"0"</span>   <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+}
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org6499f15"></a>oss<br />
+<div class="outline-text-6" id="text-1-2-3-1-2">
+<div class="org-src-container">
+<pre class="src src-conf" id="orgf82b984"><span style="color: #709688;">audio_output</span> {
+type    <span style="color: #80bcb6;">"oss"</span>
+name    <span style="color: #80bcb6;">"My OSS Device"</span>
+ device    <span style="color: #80bcb6;">"/dev/dsp"</span>  <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+ mixer_type      <span style="color: #80bcb6;">"hardware"</span>  <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+ mixer_device  <span style="color: #80bcb6;">"/dev/mixer"</span>  <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+ mixer_control <span style="color: #80bcb6;">"PCM"</span>   <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+}
+
+</pre>
+</div>
+</div>
+</li>
+<li><a id="orgc18e191"></a>shout<br />
+<div class="outline-text-6" id="text-1-2-3-1-3">
+<div class="org-src-container">
+<pre class="src src-conf" id="orgffc1eb2"><span style="color: #709688;">audio_output</span> {
+type    <span style="color: #80bcb6;">"shout"</span>
+encoder   <span style="color: #80bcb6;">"vorbis"</span>    <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+name    <span style="color: #80bcb6;">"My Shout Stream"</span>
+host    <span style="color: #80bcb6;">"localhost"</span>
+port    <span style="color: #80bcb6;">"8000"</span>
+mount   <span style="color: #80bcb6;">"/mpd.ogg"</span>
+password  <span style="color: #80bcb6;">"hackme"</span>
+quality   <span style="color: #80bcb6;">"5.0"</span>
+bitrate   <span style="color: #80bcb6;">"128"</span>
+format    <span style="color: #80bcb6;">"44100:16:1"</span>
+ protocol  <span style="color: #80bcb6;">"icecast2"</span>    <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+ user    <span style="color: #80bcb6;">"source"</span>    <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+ description <span style="color: #80bcb6;">"My Stream Description"</span> <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+ url   <span style="color: #80bcb6;">"http://example.com"</span>  <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+  genre   <span style="color: #80bcb6;">"jazz"</span>      <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+  public    <span style="color: #80bcb6;">"no"</span>      <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+  timeout   <span style="color: #80bcb6;">"2"</span>     <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+  mixer_type      <span style="color: #80bcb6;">"software"</span>    <span style="color: #513C44;"># </span><span style="color: #513C44;">optional</span>
+}
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org286c154"></a>recorder<br />
+<div class="outline-text-6" id="text-1-2-3-1-4">
+<div class="org-src-container">
+<pre class="src src-conf" id="orgdd22c74"><span style="color: #709688;">audio_output</span> {
+type    <span style="color: #80bcb6;">"recorder"</span>
+name    <span style="color: #80bcb6;">"My recorder"</span>
+encoder   <span style="color: #80bcb6;">"vorbis"</span>    <span style="color: #513C44;"># </span><span style="color: #513C44;">optional, vorbis or lame</span>
+path    <span style="color: #80bcb6;">"/var/lib/mpd/recorder/mpd.ogg"</span>
+ quality   <span style="color: #80bcb6;">"5.0"</span>     <span style="color: #513C44;"># </span><span style="color: #513C44;">do not define if bitrate is defined</span>
+bitrate   <span style="color: #80bcb6;">"128"</span>     <span style="color: #513C44;"># </span><span style="color: #513C44;">do not define if quality is defined</span>
+format    <span style="color: #80bcb6;">"44100:16:1"</span>
+}
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org6e51fd6"></a>httpd<br />
+<div class="outline-text-6" id="text-1-2-3-1-5">
+<div class="org-src-container">
+<pre class="src src-conf" id="org8d5fa61"><span style="color: #709688;">audio_output</span> {
+ type    <span style="color: #80bcb6;">"httpd"</span>
+ name    <span style="color: #80bcb6;">"My HTTP Stream"</span>
+ encoder   <span style="color: #80bcb6;">"vorbis"</span>    <span style="color: #513C44;"># </span><span style="color: #513C44;">optional, vorbis or lame</span>
+ port    <span style="color: #80bcb6;">"8000"</span>
+ bind_to_address <span style="color: #80bcb6;">"0.0.0.0"</span>   <span style="color: #513C44;"># </span><span style="color: #513C44;">optional, IPv4 or IPv6</span>
+  quality   <span style="color: #80bcb6;">"5.0"</span>     <span style="color: #513C44;"># </span><span style="color: #513C44;">do not define if bitrate is defined</span>
+ bitrate   <span style="color: #80bcb6;">"128"</span>     <span style="color: #513C44;"># </span><span style="color: #513C44;">do not define if quality is defined</span>
+ format    <span style="color: #80bcb6;">"44100:16:1"</span>
+ max_clients <span style="color: #80bcb6;">"0"</span>     <span style="color: #513C44;"># </span><span style="color: #513C44;">optional 0=no limit</span>
+}
+<span style="color: #513C44;">## </span><span style="color: #513C44;">Example "pipe" output:</span>
+<span style="color: #709688;">#</span><span style="color: #709688;">audio_output</span><span style="color: #513C44;"> {</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">type    "pipe"</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">name    "my pipe"</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">command   "aplay -f cd 2&gt;/dev/null"</span>
+<span style="color: #513C44;">## </span><span style="color: #513C44;">Or if you're want to use AudioCompress</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">command   "AudioCompress -m | aplay -f cd 2&gt;/dev/null"</span>
+<span style="color: #513C44;">## </span><span style="color: #513C44;">Or to send raw PCM stream through PCM:</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">command   "nc example.org 8765"</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">format    "44100:16:2"</span>
+}
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</li>
+<li><a id="orgb92f924"></a>rest<br />
+<div class="outline-text-5" id="text-1-2-3-2">
+<div class="org-src-container">
+<pre class="src src-conf"><span style="color: #513C44;"># </span><span style="color: #513C44;">Normalization automatic volume adjustments ##################################</span>
+<span style="color: #513C44;">#</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">This setting specifies the type of ReplayGain to use. This setting can have</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">the argument "off", "album", "track" or "auto". "auto" is a special mode that</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">chooses between "track" and "album" depending on the current state of</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">random playback. If random playback is enabled then "track" mode is used.</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">See <a href="http://www.replaygain.org">&lt;http://www.replaygain.org&gt;</a> for more details about ReplayGain.</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">This setting is off by default.</span>
+<span style="color: #513C44;">#</span>
+<span style="color: #513C44;">#</span><span style="color: #513C44;">replaygain     "album"</span>
+<span style="color: #513C44;">#</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">This setting sets the pre-amp used for files that have ReplayGain tags. By</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">default this setting is disabled.</span>
+<span style="color: #513C44;">#</span>
+<span style="color: #513C44;">#</span><span style="color: #513C44;">replaygain_preamp    "0"</span>
+<span style="color: #513C44;">#</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">This setting sets the pre-amp used for files that do NOT have ReplayGain tags.</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">By default this setting is disabled.</span>
+<span style="color: #513C44;">#</span>
+<span style="color: #513C44;">#</span><span style="color: #513C44;">replaygain_missing_preamp  "0"</span>
+<span style="color: #513C44;">#</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">This setting enables or disables ReplayGain limiting.</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">MPD calculates actual amplification based on the ReplayGain tags</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">and replaygain_preamp / replaygain_missing_preamp setting.</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">If replaygain_limit is enabled MPD will never amplify audio signal</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">above its original level. If replaygain_limit is disabled such amplification</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">might occur. By default this setting is enabled.</span>
+<span style="color: #513C44;">#</span>
+<span style="color: #513C44;">#</span><span style="color: #513C44;">replaygain_limit   "yes"</span>
+<span style="color: #513C44;">#</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">This setting enables on-the-fly normalization volume adjustment. This will</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">result in the volume of all playing audio to be adjusted so the output has</span>
+<span style="color: #513C44;"># </span><span style="color: #513C44;">equal "loudness". This setting is disabled by default.</span>
+<span style="color: #513C44;">#</span>
+<span style="color: #513C44;">#</span><span style="color: #513C44;">volume_normalization   "no"</span>
+<span style="color: #513C44;">#</span>
+<span style="color: #513C44;">###############################################################################</span>
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgd09d2b7" class="outline-3">
+<h3 id="orgd09d2b7"><span class="section-number-3">1.3</span> termite</h3>
+<div class="outline-text-3" id="text-1-3">
+<div class="org-src-container">
+<pre class="src src-conf">[<span style="color: #709688;">options</span>]
+<span style="color: #9d81ba;">font</span> = Iosevka <span style="color: #eed891;">22</span>
+
+
+[<span style="color: #709688;">colors</span>]
+<span style="color: #9d81ba;">cursor</span> = <span style="color: #513C44;">#</span><span style="color: #513C44;">d8dee9</span>
+<span style="color: #9d81ba;">cursor_foreground</span> = <span style="color: #513C44;">#</span><span style="color: #513C44;">2e3440</span>
+
+<span style="color: #9d81ba;">foreground</span> = <span style="color: #513C44;">#</span><span style="color: #513C44;">d8dee9</span>
+<span style="color: #9d81ba;">foreground_bold</span> = <span style="color: #513C44;">#</span><span style="color: #513C44;">d8dee9</span>
+<span style="color: #9d81ba;">background</span> = <span style="color: #513C44;">#</span><span style="color: #513C44;">2e3440</span>
+
+<span style="color: #9d81ba;">highlight</span> = <span style="color: #513C44;">#</span><span style="color: #513C44;">4c566a</span>
+
+<span style="color: #9d81ba;">color0</span>  = <span style="color: #513C44;">#</span><span style="color: #513C44;">3b4252</span>
+<span style="color: #9d81ba;">color1</span>  = <span style="color: #513C44;">#</span><span style="color: #513C44;">bf616a</span>
+<span style="color: #9d81ba;">color2</span>  = <span style="color: #513C44;">#</span><span style="color: #513C44;">a3be8c</span>
+<span style="color: #9d81ba;">color3</span>  = <span style="color: #513C44;">#</span><span style="color: #513C44;">ebcb8b</span>
+<span style="color: #9d81ba;">color4</span>  = <span style="color: #513C44;">#</span><span style="color: #513C44;">81a1c1</span>
+<span style="color: #9d81ba;">color5</span>  = <span style="color: #513C44;">#</span><span style="color: #513C44;">b48ead</span>
+<span style="color: #9d81ba;">color6</span>  = <span style="color: #513C44;">#</span><span style="color: #513C44;">88c0d0</span>
+<span style="color: #9d81ba;">color7</span>  = <span style="color: #513C44;">#</span><span style="color: #513C44;">e5e9f0</span>
+<span style="color: #9d81ba;">color8</span>  = <span style="color: #513C44;">#</span><span style="color: #513C44;">4c566a</span>
+<span style="color: #9d81ba;">color9</span>  = <span style="color: #513C44;">#</span><span style="color: #513C44;">bf616a</span>
+<span style="color: #9d81ba;">color10</span> = <span style="color: #513C44;">#</span><span style="color: #513C44;">a3be8c</span>
+<span style="color: #9d81ba;">color11</span> = <span style="color: #513C44;">#</span><span style="color: #513C44;">ebcb8b</span>
+<span style="color: #9d81ba;">color12</span> = <span style="color: #513C44;">#</span><span style="color: #513C44;">81a1c1</span>
+<span style="color: #9d81ba;">color13</span> = <span style="color: #513C44;">#</span><span style="color: #513C44;">b48ead</span>
+<span style="color: #9d81ba;">color14</span> = <span style="color: #513C44;">#</span><span style="color: #513C44;">8fbcbb</span>
+<span style="color: #9d81ba;">color15</span> = <span style="color: #513C44;">#</span><span style="color: #513C44;">eceff4</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb9c1e37" class="outline-3">
+<h3 id="orgb9c1e37"><span class="section-number-3">1.4</span> zsh</h3>
+<div class="outline-text-3" id="text-1-4">
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #cea2ca;">source</span> ~/.profile
+<span style="color: #cea2ca;">source</span> ~/.bashrc.aliases
+
+<span style="color: #9d81ba;">fpath</span>=<span style="color: #a0586c;">(</span> <span style="color: #80bcb6;">"~/utilities/zfunctions"</span> <span style="color: #80bcb6;">"</span><span style="color: #9d81ba;">$</span><span style="color: #9d81ba;">{fpath[@]}</span><span style="color: #80bcb6;">"</span> <span style="color: #a0586c;">)</span>
+<span style="color: #9d81ba;">fpath</span>=<span style="color: #a0586c;">(</span> <span style="color: #80bcb6;">"~/utilities/zfunctions/myCode"</span> <span style="color: #80bcb6;">"</span><span style="color: #9d81ba;">$</span><span style="color: #9d81ba;">{fpath[@]}</span><span style="color: #80bcb6;">"</span> <span style="color: #a0586c;">)</span>
+<span style="color: #cea2ca;">fh</span><span style="color: #a0586c;">()</span> <span style="color: #a0586c;">{</span>
+  <span style="color: #cea2ca;">print</span> -z $<span style="color: #9d81ba;">(</span> <span style="color: #80bcb6;">(</span><span style="color: #a0586c;">[</span> -n <span style="color: #80bcb6;">"</span><span style="color: #9d81ba;">$</span><span style="color: #9d81ba;">ZSH_NAME</span><span style="color: #80bcb6;">"</span> <span style="color: #a0586c;">]</span> &amp;&amp; <span style="color: #cea2ca;">fc</span> -l <span style="color: #eed891;">1</span> || <span style="color: #cea2ca;">history</span><span style="color: #80bcb6;">)</span> | fzf +s --tac | sed -r <span style="color: #80bcb6;">'s/ *[0-9]*\*? *//'</span> | sed -r <span style="color: #80bcb6;">'s/\\/\\\\/g'</span><span style="color: #9d81ba;">)</span>
+<span style="color: #a0586c;">}</span>
+
+zstyle <span style="color: #80bcb6;">':completion:*'</span> accept-exact <span style="color: #80bcb6;">'*(N)'</span>
+zstyle <span style="color: #80bcb6;">':completion:*'</span> use-cache on
+zstyle <span style="color: #80bcb6;">':completion:*'</span> cache-path ~/.zsh/cache
+
+<span style="color: #cea2ca;">export</span> <span style="color: #9d81ba;">POWERLEVEL8K_MODE</span>=<span style="color: #80bcb6;">'nerdfont-complete'</span>
+<span style="color: #cea2ca;">export</span> <span style="color: #9d81ba;">ZSH_THEME</span>=<span style="color: #80bcb6;">""</span>
+
+<span style="color: #cea2ca;">source</span> ~/utilities/antigen.zsh
+antigen use oh-my-zsh
+antigen bundle <span style="color: #709688;">git</span>
+antigen bundle pip
+antigen bundle fzf
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle djui/alias-tips
+antigen bundle mafredri/zsh-async
+antigen bundle
+antigen bundle npm
+antigen bundle yourfin/pure-agnoster
+antigen apply
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org59f60ca" class="outline-3">
+<h3 id="org59f60ca"><span class="section-number-3">1.5</span> compton</h3>
+<div class="outline-text-3" id="text-1-5">
+<div class="org-src-container">
+<pre class="src src-conf"><span style="color: #9d81ba;">backend</span> = <span style="color: #80bcb6;">"glx"</span>;
+<span style="color: #9d81ba;">vsync</span> = <span style="color: #80bcb6;">"opengl"</span>;
+<span style="color: #9d81ba;">shadow</span> = true;
+<span style="color: #9d81ba;">no-dnd-shadow</span> = true;
+<span style="color: #9d81ba;">no-dock-shadow</span> = true;
+<span style="color: #9d81ba;">clear-shadow</span> = true;
+<span style="color: #9d81ba;">shadow-radius</span> = <span style="color: #eed891;">2</span>;
+<span style="color: #9d81ba;">shadow-offset-x</span> = <span style="color: #eed891;">1</span>;
+<span style="color: #9d81ba;">shadow-offset-y</span> = <span style="color: #eed891;">1</span>;
+<span style="color: #9d81ba;">shadow-opacity</span> = <span style="color: #eed891;">0.3</span>;
+<span style="color: #9d81ba;">shadow-red</span> = <span style="color: #eed891;">0.0</span>;
+<span style="color: #9d81ba;">shadow-green</span> = <span style="color: #eed891;">0.0</span>;
+
+<span style="color: #9d81ba;">shadow-blue</span> = <span style="color: #eed891;">0.2</span>;
+<span style="color: #9d81ba;">shadow-ignore-shaped</span> = true;
+<span style="color: #9d81ba;">inactive-opacity</span> = <span style="color: #eed891;">0.9</span>;
+<span style="color: #9d81ba;">frame-opacity</span> = <span style="color: #eed891;">0.9</span>;
+<span style="color: #9d81ba;">inactive-opacity-override</span> = false;
+<span style="color: #9d81ba;">alpha-step</span> = <span style="color: #eed891;">0.06</span>;
+<span style="color: #9d81ba;">inactive-dim</span> = <span style="color: #eed891;">0.2</span>;
+<span style="color: #9d81ba;">blur-kern</span> = <span style="color: #80bcb6;">"3x3box"</span>;
+<span style="color: #9d81ba;">blur-background-exclude</span> = [ <span style="color: #80bcb6;">"window_type = 'dock'"</span>, <span style="color: #80bcb6;">"window_type = 'desktop'"</span> ];
+<span style="color: #9d81ba;">fading</span> = false;
+<span style="color: #9d81ba;">fade-in-step</span> = <span style="color: #eed891;">0.03</span>;
+<span style="color: #9d81ba;">fade-out-step</span> = <span style="color: #eed891;">0.03</span>;
+<span style="color: #9d81ba;">fade-exclude</span> = [ ];
+<span style="color: #9d81ba;">mark-wmwin-focused</span> = true;
+<span style="color: #9d81ba;">mark-ovredir-focused</span> = true;
+<span style="color: #9d81ba;">detect-rounded-corners</span> = true;
+<span style="color: #9d81ba;">detect-client-opacity</span> = true;
+<span style="color: #9d81ba;">refresh-rate</span> = <span style="color: #eed891;">0</span>;
+<span style="color: #9d81ba;">dbe</span> = false;
+<span style="color: #9d81ba;">paint-on-overlay</span> = true;
+<span style="color: #9d81ba;">focus-exclude</span> = [ <span style="color: #80bcb6;">"class_g = 'Cairo-clock'"</span> ];
+<span style="color: #9d81ba;">detect-transient</span> = true;
+<span style="color: #9d81ba;">detect-client-leader</span> = true;
+<span style="color: #9d81ba;">invert-color-include</span> = [ ];
+<span style="color: #9d81ba;">glx-copy-from-front</span> = false;
+<span style="color: #9d81ba;">glx-swap-method</span> = <span style="color: #80bcb6;">"undefined"</span>;
+wintypes :
+{
+tooltip :
+ <span style="color: #709688;"> </span>{
+    <span style="color: #9d81ba;">fade</span> = true;
+    <span style="color: #9d81ba;">shadow</span> = false;
+    <span style="color: #9d81ba;">opacity</span> = <span style="color: #eed891;">1</span>;
+    <span style="color: #9d81ba;">focus</span> = true;
+  };
+};
+<span style="color: #9d81ba;">blur-background</span> = true;
+<span style="color: #9d81ba;">blur-background-frame</span> = true;
+<span style="color: #9d81ba;">no-fading-openclose</span> = true;
+<span style="color: #9d81ba;">opacity-rule</span> = [ <span style="color: #80bcb6;">"0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'"</span> ];
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgeb59743" class="outline-3">
+<h3 id="orgeb59743"><span class="section-number-3">1.6</span> aliases</h3>
+<div class="outline-text-3" id="text-1-6">
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #cea2ca;">alias</span> <span style="color: #709688;">ls</span>=<span style="color: #80bcb6;">'</span><span style="color: #80bcb6;">ls</span><span style="color: #80bcb6;"> --color=auto'</span>
+<span style="color: #cea2ca;">alias</span> <span style="color: #709688;">grep</span>=<span style="color: #80bcb6;">'</span><span style="color: #80bcb6;">grep</span><span style="color: #80bcb6;"> --color=auto'</span>
+<span style="color: #cea2ca;">alias</span> <span style="color: #9d81ba;">pacman</span>=<span style="color: #80bcb6;">'</span><span style="color: #80bcb6;">sudo</span><span style="color: #80bcb6;"> pacman'</span>
+<span style="color: #cea2ca;">alias</span> <span style="color: #9d81ba;">journalctl</span>=<span style="color: #80bcb6;">'</span><span style="color: #80bcb6;">sudo</span><span style="color: #80bcb6;"> journalctl'</span>
+<span style="color: #cea2ca;">alias</span> <span style="color: #9d81ba;">systemctl</span>=<span style="color: #80bcb6;">'</span><span style="color: #80bcb6;">sudo</span><span style="color: #80bcb6;"> systemctl'</span>
+
+<span style="color: #cea2ca;">alias</span> <span style="color: #9d81ba;">c</span>=<span style="color: #80bcb6;">'clear'</span>
+<span style="color: #cea2ca;">alias</span> <span style="color: #709688;">cp</span>=<span style="color: #80bcb6;">'</span><span style="color: #80bcb6;">cp</span><span style="color: #80bcb6;"> -i'</span>
+<span style="color: #cea2ca;">alias</span> <span style="color: #709688;">mv</span>=<span style="color: #80bcb6;">'</span><span style="color: #80bcb6;">mv</span><span style="color: #80bcb6;"> -i'</span>
+<span style="color: #cea2ca;">alias</span> <span style="color: #9d81ba;">j</span>=<span style="color: #80bcb6;">'jobs'</span>
+<span style="color: #cea2ca;">alias</span> <span style="color: #9d81ba;">o</span>=<span style="color: #80bcb6;">'xdg-open'</span>
+<span style="color: #cea2ca;">alias</span> <span style="color: #9d81ba;">r</span>=<span style="color: #80bcb6;">'ranger'</span>
+<span style="color: #cea2ca;">alias</span> <span style="color: #9d81ba;">tma</span>=<span style="color: #80bcb6;">'tmux attach-session -t'</span>
+<span style="color: #cea2ca;">alias</span> <span style="color: #9d81ba;">m</span>=<span style="color: #80bcb6;">'pulsemixer'</span>
+<span style="color: #cea2ca;">alias</span> <span style="color: #9d81ba;">n</span>=<span style="color: #80bcb6;">'nvim'</span>
+
+<span style="color: #cea2ca;">alias</span> <span style="color: #9d81ba;">weather</span>=<span style="color: #80bcb6;">'</span><span style="color: #80bcb6;">curl</span><span style="color: #80bcb6;"> -H \"Accept-Language: fr\" wttr.in/montreal'</span>
+
+
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4e1f243" class="outline-3">
+<h3 id="org4e1f243"><span class="section-number-3">1.7</span> <span class="todo TODO">TODO</span> ranger</h3>
+</div>
+</div>
+
+
+<div id="outline-container-org474cea2" class="outline-2">
+<h2 id="org474cea2"><span class="section-number-2">2</span> packages</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-orgb5c73e9" class="outline-3">
+<h3 id="orgb5c73e9"><span class="section-number-3">2.1</span> livecli&#xa0;&#xa0;&#xa0;<span class="tag"><span class="aur">aur</span></span></h3>
+</div>
+</div>
+
+<div id="outline-container-org4556700" class="outline-2">
+<h2 id="org4556700"><span class="section-number-2">3</span> fonts</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li><a href="https://wiki.archlinux.org/index.php/Fonts">https://wiki.archlinux.org/index.php/Fonts</a></li>
+</ul>
+</div>
+
+<div id="outline-container-org78c7362" class="outline-3">
+<h3 id="org78c7362"><span class="section-number-3">3.1</span> sample pkgbuild</h3>
+<div class="outline-text-3" id="text-3-1">
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #513C44;"># </span><span style="color: #513C44;">Maintainer: Jan Alexander Steffens (heftig) <a href="mailto:jan.steffens%40gmail.com">&lt;jan.steffens@gmail.com&gt;</a></span>
+<span style="color: #9d81ba;">pkgname</span>=adobe-source-code-pro-fonts
+<span style="color: #9d81ba;">pkgver</span>=2.030ro+1.050it
+<span style="color: #9d81ba;">_relver</span>=2.030R-ro/1.050R-it
+<span style="color: #9d81ba;">pkgrel</span>=<span style="color: #eed891;">5</span>
+<span style="color: #9d81ba;">pkgdesc</span>=<span style="color: #80bcb6;">"Monospaced font family for user interface and coding environments"</span>
+<span style="color: #9d81ba;">url</span>=<span style="color: #80bcb6;">"https://adobe-fonts.github.io/source-code-pro/"</span>
+<span style="color: #9d81ba;">arch</span>=<span style="color: #a0586c;">(</span>any<span style="color: #a0586c;">)</span>
+<span style="color: #9d81ba;">license</span>=<span style="color: #a0586c;">(</span>custom<span style="color: #a0586c;">)</span>
+<span style="color: #9d81ba;">_tarname</span>=source-code-pro-$<span style="color: #a0586c;">{</span><span style="color: #9d81ba;">_relver</span>//<span style="color: #80bcb6;">\/</span>/-<span style="color: #a0586c;">}</span>
+<span style="color: #9d81ba;">source</span>=<span style="color: #a0586c;">(</span><span style="color: #80bcb6;">"$_tarname.tar.gz::https://github.com/adobe-fonts/source-code-pro/archive/$_relver.tar.gz"</span>
+        https://github.com/adobe-fonts/source-code-pro/releases/download/variable-fonts/SourceCodeVariable-Roman.otf
+        https://github.com/adobe-fonts/source-code-pro/releases/download/variable-fonts/SourceCodeVariable-Italic.otf<span style="color: #a0586c;">)</span>
+<span style="color: #9d81ba;">sha256sums</span>=<span style="color: #a0586c;">(</span><span style="color: #80bcb6;">'a4e4dd59b8e0a436b934f0f612c2e91b5932910c6d1c3b7d1a5a9f389c86302b'</span>
+            <span style="color: #80bcb6;">'af8fdd265f6208816fde44062a27b79ce2a594ded44ea96055a1655b6869992d'</span>
+            <span style="color: #80bcb6;">'b2ca3a3c1fe0701ad74aa7c66c37972d07b1237197a816a1a5646c7e42a11353'</span><span style="color: #a0586c;">)</span>
+
+<span style="color: #cea2ca;">package</span><span style="color: #a0586c;">()</span> <span style="color: #a0586c;">{</span>
+    <span style="color: #709688;">cd</span> $<span style="color: #9d81ba;">_tarname</span>
+    install -d <span style="color: #80bcb6;">"</span><span style="color: #9d81ba;">$</span><span style="color: #9d81ba;">pkgdir</span><span style="color: #80bcb6;">/usr/share/fonts/</span><span style="color: #9d81ba;">$</span><span style="color: #9d81ba;">{pkgname%-fonts}</span><span style="color: #80bcb6;">"</span>
+    install -t <span style="color: #80bcb6;">"</span><span style="color: #9d81ba;">$</span><span style="color: #9d81ba;">pkgdir</span><span style="color: #80bcb6;">/usr/share/fonts/</span><span style="color: #9d81ba;">$</span><span style="color: #9d81ba;">{pkgname%-fonts}</span><span style="color: #80bcb6;">"</span> -m644 OTF/*.otf ../*.otf
+    install -Dm644 LICENSE.txt <span style="color: #80bcb6;">"</span><span style="color: #9d81ba;">$</span><span style="color: #9d81ba;">pkgdir</span><span style="color: #80bcb6;">/usr/share/licenses/</span><span style="color: #9d81ba;">$</span><span style="color: #9d81ba;">pkgname</span><span style="color: #80bcb6;">/LICENSE"</span>
+<span style="color: #a0586c;">}</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2d6131e" class="outline-3">
+<h3 id="org2d6131e"><span class="section-number-3">3.2</span> my sample pkgbuild</h3>
+<div class="outline-text-3" id="text-3-2">
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #9d81ba;">pkgname</span>=
+<span style="color: #9d81ba;">_tarname</span>=source-code-pro-$<span style="color: #a0586c;">{</span><span style="color: #9d81ba;">_relver</span>//<span style="color: #80bcb6;">\/</span>/-<span style="color: #a0586c;">}</span>
+
+<span style="color: #9d81ba;">_relver</span>=2.030R-ro/1.050R-it
+<span style="color: #9d81ba;">source</span>=<span style="color: #a0586c;">(</span><span style="color: #80bcb6;">"$_tarname.tar.gz::https://github.com/adobe-fonts/source-code-pro/archive/$_relver.tar.gz"</span>
+        https://github.com/adobe-fonts/source-code-pro/releases/download/variable-fonts/SourceCodeVariable-Roman.otf
+        https://github.com/adobe-fonts/source-code-pro/releases/download/variable-fonts/SourceCodeVariable-Italic.otf<span style="color: #a0586c;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org8d2c71e" class="outline-2">
+<h2 id="org8d2c71e"><span class="section-number-2">4</span> pacman</h2>
+<div class="outline-text-2" id="text-4">
+<div class="org-src-container">
+<pre class="src src-shell">pacman -S $<span style="color: #a0586c;">(</span>pacman -Si python-pip|sed -n <span style="color: #80bcb6;">'/Depends\ On/,/:/p'</span>|sed <span style="color: #80bcb6;">'$d'</span>|cut -d: -f2<span style="color: #a0586c;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org4d1d418" class="outline-2">
+<h2 id="org4d1d418"><span class="section-number-2">5</span> ress</h2>
+<div class="outline-text-2" id="text-5">
+<ul class="org-ul">
+<li><a href="https://www.youtube.com/watch?v=HbgzrKJvDRw">Linux File System/Structure Explained! - YouTube</a></li>
+<li><a href="https://www.youtube.com/watch?v=l0QGLMwR-lY">Top 10 Linux Job Interview Questions - YouTube</a></li>
+<li><a href="https://www.youtube.com/watch?v=l0QGLMwR-lY">Top 10 Linux Job Interview Questions - YouTube</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: frederic.boilea</p>
+<p class="date">Created: 2019-10-27 Sun 17:00</p>
+</div>
+</body>
+</html>

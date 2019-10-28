@@ -1,8 +1,8 @@
 #+title: arch/os stuff
 #+author: frederic.boilea
-
+#+html_head: <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
 * myconf
-** i3
+** i3                                                               :stable:
 :PROPERTIES:
 :header-args: :tangle ~/.config/mpd/mpd.conf :comments link
 :END:
@@ -26,6 +26,7 @@ set $term termite
 set $shell /usr/bin/zsh
 #set $browser brave
 exec_always feh --bg-scale "/home/gaston/pics/wallpapers/blue-and-dark-sky-by-mark-kirkpatrick-3840×2160.jpg"
+exec xmodmap ~/.xmodmap
 
 
 exec source ~/.bashrc
@@ -396,7 +397,7 @@ general {
 }
 #+END_SRC
 
-** mpd
+** mpd                                                              :stable:
 :PROPERTIES:
 :header-args: :tangle ~/.config/mpd/mpd.conf :comments link
 :END:
@@ -583,7 +584,7 @@ audio_output {
 ###############################################################################
 #+end_src
 
-** termite
+** termite                                                          :stable:
 :PROPERTIES:
 :header-args: :tangle ~/.config/termite/config :comments link
 :END:
@@ -620,7 +621,7 @@ color14 = #8fbcbb
 color15 = #eceff4
 #+END_SRC
 
-** zsh
+** zsh                                                              :stable:
 :PROPERTIES:
 :header-args: :tangle ~/.zshrc :comments link
 :END:
@@ -655,7 +656,7 @@ antigen bundle yourfin/pure-agnoster
 antigen apply
 #+END_SRC
 
-** compton
+** compton                                                          :stable:
 :PROPERTIES:
 :header-args: :tangle ~/.config/compton/compton.conf :comments link
 :END:
@@ -716,7 +717,47 @@ opacity-rule = [ "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'" ];
 
 #+END_SRC
 
+** aliases                                                          :stable:
+:PROPERTIES:
+:header-args: :tangle ~/.bashrc.aliases :comments link
+:END:
+#+BEGIN_SRC shell
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias pacman='sudo pacman'
+alias journalctl='sudo journalctl'
+alias systemctl='sudo systemctl'
+
+alias c='clear'
+alias cp='cp -i'
+alias mv='mv -i'
+alias j='jobs'
+alias o='xdg-open'
+alias r='ranger'
+alias tma='tmux attach-session -t'
+alias m='pulsemixer'
+alias n='nvim'
+
+alias weather='curl -H \"Accept-Language: fr\" wttr.in/montreal'
+
+
+
+#+END_SRC
+
 ** TODO ranger
+** TODO clipboard management
+[[https://www.reddit.com/r/archlinux/comments/9v5yhr/which_clipboard_manager_do_you_use/][Which clipboard manager do you use? : archlinux]]
+https://github.com/astrand/xclip
+https://github.com/gilbertw1/roficlip
+https://github.com/mrichar1/clipster
+** TODO screenshots/captures
+*** maim/xclip scripts
+** TODO rofi
+** HOLD conky
+
+
+* packages
+** livecli                                                             :aur:
 
 * fonts
 - https://wiki.archlinux.org/index.php/Fonts
@@ -763,34 +804,6 @@ source=("$_tarname.tar.gz::https://github.com/adobe-fonts/source-code-pro/archiv
 #+begin_src shell
 pacman -S $(pacman -Si python-pip|sed -n '/Depends\ On/,/:/p'|sed '$d'|cut -d: -f2)
 #+end_src
-
-* dotfiles
-** aliases
-:PROPERTIES:
-:header-args: :tangle ~/.bashrc.aliases :comments link
-:END:
-#+BEGIN_SRC shell
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'
-alias pacman='sudo pacman'
-alias journalctl='sudo journalctl'
-alias systemctl='sudo systemctl'
-
-alias c='clear'
-alias cp='cp -i'
-alias mv='mv -i'
-alias j='jobs'
-alias o='xdg-open'
-alias r='ranger'
-alias tma='tmux attach-session -t'
-alias m='pulsemixer'
-alias n='nvim'
-
-alias weather='curl -H \"Accept-Language: fr\" wttr.in/montreal'
-
-
-
-#+END_SRC
 
 * ress
 - [[https://www.youtube.com/watch?v=HbgzrKJvDRw][Linux File System/Structure Explained! - YouTube]]
