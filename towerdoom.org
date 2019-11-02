@@ -1,0 +1,1184 @@
+#+TITLE: towerdoom
+#+AUTHOR: Frederic Boileau
+#+email:frederic.boileau@protonmail.com
+#+PROPERTY: ATTACH_DIR .
+#+STARTUP:  inlineimages lognoteclock-out hideblocks
+#+ATTR_ORG: :width 200/250/300/400/500/600
+#+TODO: always(a) fixme(r) next(n) todo(t) inprog(p) stable(d) idea(i) project(j) wait(w) | broken(b)
+
+* todo future
+** always packages
+*** memacs
+- https://github.com/novoid/Memacs
+*** zoom
+  https://github.com/cyrus-and/zoom
+*** org fs tree
+https://emacs.stackexchange.com/questions/35274/how-to-import-directory-structure-to-org-mode-heading
+*** org preview html
+- https://github.com/lujun9972/org-preview-html
+*** calctex
+https://github.com/johnbcoughlin/calctex
+
+*** org-mind-map
+- https://github.com/theodorewiles/org-mind-map
+
+*** org helm rifle
+
+*** drag stuff
+https://github.com/rejeep/drag-stuff.el
+
+*** org-protocol-capture-html
+https://github.com/alphapapa/org-protocol-capture-html
+
+*** deft
+https://jblevins.org/projects/deft/
+
+*** imdb
+https://www.goodreads.com/book/show/3450744-nudge
+
+https://www.reddit.com/r/emacs/comments/9n0d0p/wikipedia_info_org_wikinforg/
+** always links
+https://orgmode.org/worg/org-tutorials/#org4320b02
+https://sachachua.com/blog/
+https://www.gnu.org/software/emacs/manual/html_mono/eintr.html
+https://cestlaz.github.io/stories/emacs/
+
+
+** next stabilize org-fs-tree
+#+begin_src emacs-lisp
+(require 'org-fs-tree)
+#+end_src
+
+#+RESULTS:
+: org-fs-tree
+
+** idea avy
+** idea complete snippets
+
+** idea printing
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+#+begin_src elisp
+(require 'printing)		; load printing package
+(setq pr-path-alist
+	    '((unix      "." "/bin" ghostview mpage PATH)
+	      (ghostview "/usr/bin/gsview")
+	      (mpage     "/usr/bin/mpage")))
+(setq pr-ps-name       'lps)
+(setq pr-ps-printer-alist '((lpss "lp" nil "-d" "HLL2390DW")))
+(pr-update-menus t)
+#+end_src
+
+** project [#A] email
+** project [#B] setup web
+- https://www.emacswiki.org/emacs/emacs-w3m
+
+** project [#B] better attachment integration
+- org download
+- org protocol
+- org attach
+- org wiki assets
+
+** project [#B] show properties as tags
+-
+
+
+** test
+
+* stable basic
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+:LOGBOOK:
+CLOCK: [2019-09-18 Wed 01:55]--[2019-09-18 Wed 01:55] =>  0:00
+- test
+:END:
+** stable COMMENT basic basic
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+#+BEGIN_SRC elisp
+(require 'org-alert)
+(setq alert-default-style 'libnotify)
+(setq evil-want-C-u-scroll nil
+      evil-want-C-d-scroll nil)
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "firefox")
+;; Files association
+(setq org-file-apps
+      '((auto-mode . emacs)
+        ("\\.djvu\\" . "evince \"%s\"")
+        ("\\.pdf\\" . "evince \"%s\"")
+        ("\\.docx\\" . "libreoffice \"%s")))
+#+END_SRC
+
+#+RESULTS:
+: ((auto-mode . emacs) (\.djvu\ . evince "%s") (\.pdf\ . evince "%s") (\.docx\ . libreoffice "%s))
+** inprog spelling
+http://manuel-uberti.github.io/emacs/2016/06/06/spellchecksetup/
+#+BEGIN_SRC emacs-lisp
+(setq ispell-program-name (executable-find "hunspell")
+      ispell-dictionary "en_US")
+(bind-key "C-c I"
+          (lambda ()
+            (interactive)
+            (ispell-change-dictionary "fr_CA")
+            (flyspell-buffer)))
+
+(bind-key "C-c E"
+          (lambda ()
+            (interactive)
+            (ispell-change-dictionary "en_GB")
+            (flyspell-buffer)))
+
+#+END_SRC
+
+#+RESULTS:
+| lambda | nil | (interactive) | (ispell-change-dictionary en_GB) | (flyspell-buffer) |
+
+** stable ui
+#+BEGIN_SRC emacs-lisp
+(set-default-font "Iosevka Nerd Font 12")
+
+(set-face-attribute 'default nil :family "Iosevka Nerd Font" :height 130)
+(set-face-attribute 'fixed-pitch nil :family "Iosevka Nerd Font")
+(set-face-attribute 'variable-pitch nil :family "EtBembo")
+
+
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+(set-frame-parameter (selected-frame) 'alpha '(87 . 87))
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+
+(setq-default tab-width 2)
+(setq c-basic-indent 2)
+(setq artist-aspect-ratio 2.0)
+
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(autoload 'ibuffer "ibuffer" "List buffers." t)
+(use-package doom-themes)
+;; (load "~/temp/dotfiles/emacsy/packages/my-doom-themes-ext-org.el")
+
+(require 'doom-themes)
+(setq doom-themes-enable-bold t
+      doom-themes-enable-italic t)
+;; (doom-themes-org-config)
+
+(defun disable-all-themes ()
+  "disable all active themes."
+  (dolist (i custom-enabled-themes)
+    (disable-theme i)))
+
+(defadvice load-theme (before disable-themes-first activate)
+  (disable-all-themes))
+#+END_SRC
+
+#+RESULTS:
+: load-theme
+
+** fixme basic bindings
+#+BEGIN_SRC elisp
+(bind-key (kbd "M-y") 'helm-show-kill-ring)
+(bind-key (kbd "M-o") 'company-complete)
+
+(bind-key (kbd "M-p") nil)
+(bind-key (kbd "M-p l") 'org-cliplink)
+(bind-key (kbd "M-p v") 'org-brain-visualize)
+(bind-key (kbd "M-p a") '+popup/raise)
+(bind-key (kbd "M-p c") 'org-id-get-create)
+(bind-key (kbd "M-p r") 'slime-repl)
+#+END_SRC
+
+#+RESULTS:
+: slime-repl
+
+** stable searching
+*** swiper/ivy :melpa:github:
+:PROPERTIES:
+:GH:       https://github.com/abo-abo/swiper
+:END:
+
+**** small config example from github
+#+begin_src elisp :tangle yes :results replace
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t)
+(setq enable-recursive-minibuffers t)
+;; enable this if you want `swiper' to use it
+;; (setq search-default-mode #'char-fold-to-regexp)
+(global-set-key "\C-s" 'swiper)
+(global-set-key (kbd "C-c C-r") 'ivy-resume)
+(global-set-key (kbd "<f6>") 'ivy-resume)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "<f1> f") 'counsel-describe-function)
+(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+(global-set-key (kbd "<f1> l") 'counsel-find-library)
+(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+(global-set-key (kbd "C-c g") 'counsel-git)
+(global-set-key (kbd "C-c f") 'counsel-fzf)
+(global-set-key (kbd "C-c j") 'counsel-git-grep)
+(global-set-key (kbd "C-c k") 'counsel-ag)
+(global-set-key (kbd "C-x l") 'counsel-locate)
+#+end_src
+
+#+RESULTS:
+: counsel-locate
+
+- http://develop.spacemacs.org/layers/+completion/ivy/README.html
+
+*** rg
+:PROPERTIES:
+:GH:       https://github.com/dajva/rg.el
+:header-args: :tangle yes
+:END:
+#+BEGIN_SRC elisp
+(use-package rg
+  :bind (("C-c l" . 'counsel-rg)
+         ("C-c r" . 'counsel-projectile-rg))
+  :config
+  (rg-enable-default-bindings))
+#+END_SRC
+
+#+RESULTS:
+: counsel-rg
+
+** broken doom modeline                                           :notangle:
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+#+BEGIN_SRC elisp
+(use-package doom-modeline)
+(doom-modeline-mode 1)
+#+end_src
+
+#+RESULTS:
+: t
+
+*** customize
+#+begin_src elisp
+(setq doom-modeline-height 25)
+(setq doom-modeline-bar-width 3)
+(setq doom-modeline-buffer-file-name-style 'truncate-upto-project)
+(setq doom-modeline-icon t)
+(setq doom-modeline-major-mode-icon t)
+(setq doom-modeline-major-mode-color-icon t)
+(setq doom-modeline-persp-name t)
+(setq doom-modeline-buffer-state-icon t)
+(setq doom-modeline-buffer-modification-icon t)
+(setq doom-modeline-minor-modes nil)
+(setq doom-modeline-enable-word-count nil)
+(setq doom-modeline-buffer-encoding t)
+(setq doom-modeline-indent-info nil)
+(setq doom-modeline-checker-simple-format t)
+(setq doom-modeline-vcs-max-length 12)
+(setq doom-modeline-persp-name t)
+(setq doom-modeline-lsp t)
+(setq doom-modeline-github nil)
+(setq doom-modeline-github-interval (* 30 60))
+(setq doom-modeline-env-version t)
+(setq doom-modeline-env-enable-python t)
+
+;; Change the executables to use for the language version string
+(setq doom-modeline-env-python-executable "python")
+(setq doom-modeline-irc t)
+(setq doom-modeline-irc-stylize 'identity)
+#+end_src
+
+#+RESULTS:
+: identity
+
+** stable tempom
+som text
+#+BEGIN_SRC elisp
+(require 'org-tempo)
+(setq tempo-interactive t)
+(tempo-define-template "my-property"
+                       '(":PROPERTIES:" p ":END:" >)
+                       "<p"
+                       "Insert a property tempate")
+(tempo-define-template "name"
+                       '("#+NAME:" (p "Name : " name)  >)
+                       "<n"
+                       "Insert name")
+(tempo-define-template "attr-org"
+                       '("#+ATTR_ORG: :width 400")
+                       "<o")
+#+END_SRC
+some text
+** stable bib stuff
+*** new default files
+#+BEGIN_SRC emacs-lisp
+(setq reftex-default-bibliography '("~/academic/biblio/master-bib.bib"))
+
+(setq org-ref-bibliography-notes "~/academic/biblio/orgRefNotes.org"
+      org-ref-default-bibliography '("~/academic/biblio/master-bib.bib")
+      org-ref-pdf-directory "~/academic/biblio/papers/")
+
+(setq bibtex-completion-bibliography '("~/academic/biblio/master-bib.bib")
+      bibtex-completion-library-path "~/academic/biblio/papers/"
+      bibtex-completion-notes-path "~/academic/biblio/helm-bibtex-notes")
+
+(setq bibtex-completion-pdf-field "file")
+(setq bibtex-completion-pdf-open-function
+      (lambda (fpath)
+        (start-process "evince" "*helm-bibtex-evince*" "/usr/bin/evince"
+                       fpath)))
+
+(setq bibtex-dialect 'biblatex)
+#+END_SRC
+
+#+RESULTS:
+: biblatex
+
+*** broken default files                                         :notangle:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
+
+#+BEGIN_SRC elisp
+(setq reftex-default-bibliography '("~/.personal/.bibstuff/master-biblio.bib"))
+
+(setq org-ref-bibliography-notes "~/.personal/.bibstuff/orgRefNotes.org"
+      org-ref-default-bibliography '("~/.personal/.bibstuff/master-bib.bib")
+      org-ref-pdf-directory "~/.personal/.bibstuff/bib-pdfs/")
+
+(setq bibtex-completion-bibliography '("~/.personal/.bibstuff/master-bib.bib")
+      bibtex-completion-library-path "~/.personal/.bibstuff/bib-pdfs/"
+      bibtex-completion-notes-path "~/.personal/.bibstuff/helm-bibtex-notes")
+
+(setq bibtex-completion-pdf-field "file")
+(setq bibtex-completion-pdf-open-function
+      (lambda (fpath)
+        (start-process "evince" "*helm-bibtex-evince*" "/usr/bin/evince"
+                       fpath)))
+
+(setq bibtex-dialect 'biblatex)
+#+END_SRC
+*** stable completion format
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+
+#+BEGIN_SRC elisp
+(setq bibtex-completion-format-citation-functions
+      '((org-mode . bibtex-completion-format-citation-ebib)
+        (latex-mode    . bibtex-completion-format-citation-cite)
+        (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
+        (default       . bibtex-completion-format-citation-default)))
+#+END_SRC
+
+#+RESULTS:
+: ((org-mode . bibtex-completion-format-citation-ebib) (latex-mode . bibtex-completion-format-citation-cite) (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc) (default . bibtex-completion-format-citation-default))
+
+*** idea completion display format
+#+begin_src elisp
+(setq bibtex-completion-display-formats
+      '((article       . "${author:36} ${title:*} ${journal:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
+        (inbook        . "${author:36} ${title:*} Chapter ${chapter:32} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
+        (incollection  . "${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
+        (inproceedings . "${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
+        (t             . "${author:36} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")))
+#+end_src
+
+#+RESULTS:
+: ((article . ${author:36} ${title:*} ${journal:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}) (inbook . ${author:36} ${title:*} Chapter ${chapter:32} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}) (incollection . ${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}) (inproceedings . ${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}) (t . ${author:36} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}))
+
+** stable evil
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+some text
+#+BEGIN_SRC elisp
+(run-with-idle-timer 20 t 'evil-normal-state)
+
+(setq-default
+ evil-escape-key-sequence "jk"
+ evil-escape-unordered-key-sequence "true")
+
+(evil-define-key nil evil-insert-state-map
+  "\C-f" 'evil-forward-char
+  "\C-b" 'evil-backward-char
+  "\C-k" 'kill-line
+  "\C-y" 'evil-paste-after)
+#+END_SRC
+
+#+RESULTS:
+
+some text
+** stable defengines
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+#+begin_src elisp
+(require 'engine-mode)
+(engine-mode t)
+
+(defengine wolfram-alpha
+  "http://www.wolframalpha.com/input/?i=%s")
+
+(defengine libgen-articles
+  "http://gen.lib.rus.ec/scimag/?q=%s")
+
+(defengine libgen-books
+  "http://gen.lib.rus.ec/search.php?req=%s")
+
+(defengine wiktionary
+  "https://www.wikipedia.org/search-redirect.php?family=wiktionary&language=en&go=Go&search=%s"
+  :keybinding "p")
+
+(defengine youtube
+  "http://www.youtube.com/results?aq=f&oq=&search_query=%s"
+  :keybinding "y")
+
+(defengine goodreads
+  "https://www.goodreads.com/search?q=%s"
+  :keybinding "r")
+
+(defengine wikipedia
+  "http://www.wikipedia.org/search-redirect.php?language=en&go=Go&search=%s"
+  :keybinding "w"
+  :docstring "Searchin' the wikis.")
+
+(defengine stack-overflow
+  "https://stackoverflow.com/search?q=%s"
+  :keybinding "s")
+
+(defengine amazon
+  "http://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=%s"
+  :keybinding "a")
+
+(defengine duckduckgo
+  "https://duckduckgo.com/?q=%s"
+  :keybinding "d")
+
+(defengine google
+  "http://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
+  :keybinding "g")
+
+(defengine github
+  "https://github.com/search?ref=simplesearch&q=%s"
+  :keybinding "h")
+
+(defengine google-maps
+  "http://maps.google.com/maps?q=%s"
+  :docstring "Mappin' it up."
+  :keybinding "m")
+
+(defengine project-gutenberg
+  "http://www.gutenberg.org/ebooks/search/?query=%s")
+
+(defengine rfcs
+  "http://pretty-rfc.herokuapp.com/search?q=%s")
+
+(defengine twitter
+  "https://twitter.com/search?q=%s")
+
+
+
+
+#+end_src
+
+#+RESULTS:
+: engine/search-twitter
+
+* stable org
+** always links
+https://tasshin.com/blog/implementing-a-second-brain-in-empty-keys-and-org-mode/
+https://lepisma.xyz
+
+** stable basic set keys and variables
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+#+NAME:org-basic-set-keys
+#+BEGIN_SRC emacs-lisp
+(setq org-directory "~/.personal/org")
+(setq org-agenda-files '("~/.personal/org"))
+(setq org-modules '(org-wikinodes org-w3m org-bbdb org-bibtex
+                                  org-docview org-gnus org-info org-irc org-mhe org-rmail org-eww))
+
+(setq org-attach-dir-relative t)
+(setq org-refile-targets '((nil :maxlevel . 9)
+                           (org-agenda-files :maxlevel . 9)))
+
+(setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
+(setq org-refile-use-outline-path t)                  ;
+
+(setq org-babel-lisp-eval-fn 'sly-eval)
+(setq org-cycle-separator-lines 2)
+
+
+(if (require 'toc-org nil t)
+    (add-hook 'org-mode-hook 'toc-org-mode)
+  (warn "toc-org not found"))
+
+(setq org-blank-before-new-entry '((heading . auto) (plain-list-item . auto)))
+
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
+
+(setq org-latex-pdf-process
+      (list "latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f %f"))
+
+#+END_SRC
+
+#+RESULTS: org-basic-set-keys
+| latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f %f |
+
+** fixme ui
+mostly from https://lepisma.xyz/2017/10/28/ricing-org-mode/index.html
+#+begin_src emacs-lisp
+(setq org-pretty-entities t
+      org-hide-emphasis-markers t
+      org-fontify-whole-heading-line t
+      org-fontify-quote-and-verse-blocks t)
+#+end_src
+
+#+RESULTS:
+: t
+
+** stable package one liner(ish) inits
+#+begin_src elisp
+(setq org-books-file "~/.personal/org/master-book-list.org")
+(require 'org-attach)
+(setq org-link-abbrev-alist '(("file" . org-attach-expand-link)))
+(use-package org-contacts
+  :after org
+  :custom (org-contacts-files '("~/.personal/org/contacts.org")))
+(use-package org-download :after org)
+(use-package org-protocol-capture-html :after org)
+#+end_src
+
+#+RESULTS:
+: org-protocol-capture-html
+
+** stable properties
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+#+begin_src elisp
+(setq org-clock-persist 'history)
+(org-clock-persistence-insinuate)
+;; Log the time when a TODO item was finished
+(setq org-log-done 'time)
+
+;; Specify global tags with fast tag selection
+(setq org-tag-alist '((:startgroup . nil) ("@school" . ?o) ("@home" . ?h) (:endgroup . nil)
+                      ("computer" . ?c) ("reading" . ?r) ("udem" . ?u) ("!udem" . ?!) ("!aux" . ?a)
+                      ("grocery" . ?g) ("homework" . ?w) ("research" . ?r)))
+
+;; Effort and global properties
+(setq org-global-properties '(("Effort_ALL". "0 0:10 0:20 0:30 1:00 1:30 2:00 3:00 4:00 6:00 8:00")))
+
+;; Set global Column View format
+(setq org-columns-default-format '"%38ITEM(Details) %TAGS(Context) %7TODO(To Do) %5Effort(Time){:} %6CLOCKSUM(Clock)")
+#+end_src
+
+#+RESULTS:
+: %38ITEM(Details) %TAGS(Context) %7TODO(To Do) %5Effort(Time){:} %6CLOCKSUM(Clock)
+
+** stable small utilities
+#+begin_src elisp
+(defun org-archive-done-tasks ()
+  (interactive)
+  (org-map-entries
+   (lambda ()
+     (org-archive-subtree)
+     (setq org-map-continue-from (outline-previous-heading)))
+   "/done" 'tree))
+
+(defun custom-org-cliplink ()
+  (interactive)
+  (org-cliplink-insert-transformed-title
+   (org-cliplink-clipboard-content)     ;take the URL from the CLIPBOARD
+   (lambda (url title)
+     (let* ((parsed-url (url-generic-parse-url url)) ;parse the url
+            (clean-title
+             (cond
+              ;; if the host is github.com, cleanup the title
+              ((string= (url-host parsed-url) "github.com")
+               (replace-regexp-in-string "GitHub - .*: \\(.*\\)" "\\1" title))
+              ;; otherwise keep the original title
+              (t title))))
+       ;; forward the title to the default org-cliplink transformer
+       (org-cliplink-org-mode-link-transformer url clean-title)))))
+#+end_src
+
+#+RESULTS:
+: custom-org-cliplink
+
+** stable evil
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+
+#+BEGIN_SRC emacs-lisp
+(use-package evil-org
+  :commands evil-org-mode
+  :after org
+  :init
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  :config
+
+  (evil-define-key 'normal evil-org-mode-map
+    "<" 'org-metaleft
+    ">" 'org-metaright
+    "-" 'org-cycle-list-bullet
+    (kbd "TAB") 'org-cycle)
+  ;; normal & insert state shortcuts.
+  (mapc (lambda (state)
+          (evil-define-key state evil-org-mode-map
+            (kbd "C-;") 'ober-eval-block-in-repl
+            (kbd "M-;") 'ober-eval-in-repl
+            (kbd "M-l") 'org-metaright
+            (kbd "M-h") 'org-metaleft
+            (kbd "M-k") 'org-metaup
+            (kbd "M-j") 'org-metadown
+            (kbd "M-L") 'org-shiftmetaright
+            (kbd "M-H") 'org-shiftmetaleft
+            (kbd "M-K") 'org-shiftmetaup
+            (kbd "M-J") 'org-shiftmetadown))
+        '('normal 'insert)))
+#+END_SRC
+
+#+RESULTS:
+: t
+
+** stable capture                                                  :tocheck:
+:PROPERTIES:
+:header-args: :tangle yes
+:url:      http://howardism.org/Technical/Emacs/capturing-content.html
+:END:
+
+#+srcname: capture-templates
+#+BEGIN_SRC elisp
+(setq org-default-notes-file (concat org-directory "notes.org"))
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/.personal/org/inbox.org" "tasks")
+         "* todo %?\n:PROPERTIES:\n:Created: %U\n:Linked: %A\n:END:\n %i"
+         :prepend t)
+
+        ("s" "Started" entry (file+headline "~/.personal/org/inbox.org" "tasks")
+         "* started %?\n %i" :clock-in t :clock-keep t :prepend t)
+
+        ("j" "Journal" entry (file+olp+datetree "~/.personal/org/journal.org")
+         "* %?\nEntered on %U\n %i\n %a")
+
+        ("b" "Books" entry (file+headline "~/notes/books.org" "Books")
+         "* %(read-string \"Title: \")\n
+          :PROPERTIES: Pages: %(number-to-string (read-number \"Pages:\")):END:\n
+          Author: %(read-string \"Author: \")\n")
+
+        ("w" "Web site" entry
+         (file "")
+         "* %a :website:\n\n%U %?\n\n%:initial")
+
+        ("c" "Contact" entry (file+headline "~/.personal/org/contacts.org" "Friends")
+         "* %(read-string \"Name: \")\n
+          :PROPERTIES:\n
+          :EMAIL: %(read-string \"emacs: \")\n
+          :END:")
+
+        ("Q" "quote org capture" entry
+         (file+headline ,"~/.personal/org/inbox.org" "browsing")
+         "* %?%:description Added %U
+,#+BEGIN_QUOTE
+%x
+,#+END_QUOTE" :immediate-finish t)))
+#+END_SRC
+
+#+RESULTS: capture-templates
+| t | Todo | entry | (file+headline ~/.personal/org/todo.org tasks) | * TODO %? |
+
+* inprog coding/ide
+** inprog completion
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+:samples:
+https://gist.github.com/rswgnu/85ca5c69bb26551f3f27500855893dbe
+:end:
+*** company
+#+BEGIN_SRC elisp
+(use-package company
+  :init
+  (setq company-tooltip-align-annotations t)
+  :defer 2
+  :diminish
+  :custom
+  (company-begin-commands '(self-insert-command))
+  (company-idle-delay .2)
+  (company-minimum-prefix-length 2)
+  (company-show-numbers t)
+  (company-tooltip-align-annotations 't)
+  (global-company-mode t))
+(define-key global-map (kbd "C-.") 'company-files)
+#+END_SRC
+
+#+RESULTS:
+: company-files
+
+*** preview ala vim                                      :tocheck:notangle:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
+#+BEGIN_SRC elisp
+(defun company-preview-if-not-tng-frontend (command)
+  "`company-preview-frontend', but not when tng is active."
+  (unless (and (eq command 'post-command)
+               company-selection-changed
+               (memq 'company-tng-frontend company-frontends))
+    (company-preview-frontend command)))
+#+END_SRC
+*** company-box                                                   :tocheck:
+#+BEGIN_SRC elisp
+(use-package company-box
+  :after company
+  :diminish
+  :hook (company-mode . company-box-mode))
+#+END_SRC
+
+*** other configs
+
+** inprog snippets
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+*** inprog basic yas config
+example:
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/macs/packages/")
+(require 'yasnippet)
+(use-package yasnippet-snippets)
+(use-package helm-c-yasnippet)
+(setq helm-yas-space-match-any-greedy t)
+(global-set-key (kbd "C-c y") 'helm-yas-complete)
+(setq yas-snippet-dirs
+      '("~/macs/snippets"))
+(yas-global-mode 1)
+#+END_SRC
+
+#+RESULTS:
+: t
+
+*** inprog yankpad                                               :notangle:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
+#+begin_src elisp
+(use-package yankpad
+  :defer 10
+  :init
+  (setq yankpad-file "~/.personal/org/yankpad.org")
+  :config
+  (bind-key "<f7>" 'yankpad-map)
+  (bind-key "<f12>" 'yankpad-expand)
+  ;; If you want to complete snippets using company-mode
+  (add-to-list 'company-backends #'company-yankpad)
+  ;; If you want to expand snippets with hippie-expand
+  (add-to-list 'hippie-expand-try-functions-list #'yankpad-expand))
+#+end_src
+
+** stable languages
+*** inprog onliner setups
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+#+begin_src elisp
+(setq slime-contribs '(slime-fancy slime-asdf))
+(setq inferior-lisp-program "sbcl --dynamic-space-size 10000")
+(setq inferior-julia-program-name "/usr/bin/julia")
+(setq python-python-command "/usr/bin/ipython")
+
+(use-package js2-mode)
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+
+;; (setq erlang-root-dir "/usr/lib/erlang")
+;; (add-to-list 'load-path "/usr/lib/erlang/lib/tools-3.2.1/emacs")
+;; (add-to-list 'load-path "~/dotfiles/emacsy/packages/stable-packages/ob-erlang")
+;; (add-to-list 'exec-path "/usr/lib/erlang/bin")
+;; (require 'erlang-start)
+;; (require 'ob-erlang)
+#+end_src
+
+*** inprog ggtags
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+#+begin_src elisp
+(require 'ggtags)
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+              (ggtags-mode 1))))
+
+(define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
+(define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
+(define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
+(define-key ggtags-mode-map (kbd "C-c g f") 'ggtags-find-file)
+(define-key ggtags-mode-map (kbd "C-c g c") 'ggtags-create-tags)
+(define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags)
+
+(define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
+#+end_src
+*** inprog haskell
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+#+begin_src elisp
+(require 'lsp)
+(require 'lsp-haskell)
+(require 'lsp-ui)
+(add-hook 'haskell-mode-hook #'lsp)
+(add-hook 'lsp-mode-hook 'lsp-ui-mode)
+#+end_src
+
+#+RESULTS:
+| lsp-ui-mode |
+
+*** stable babel
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+**** babel setup
+#+BEGIN_SRC emacs-lisp
+(require 'ob-shell)
+(require 'ox-md)
+(require 'julia-repl)
+(add-hook 'julia-mode-hook 'julia-repl-mode)
+(with-eval-after-load "ob"
+  (require 'org-babel-eval-in-repl))
+(require 'eval-in-repl)
+  #+END_SRC
+
+**** babel languages
+#+BEGIN_SRC elisp
+;; (add-to-list 'load-path
+             ;; "/home/sole/.opam/default/share/emacs/site-lisp/")
+;; (require 'ocp-indent)
+(setq org-ditaa-jar-path "/usr/share/java/ditaa/ditaa-0.11.jar")
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (python . t)
+   (ocaml . t)
+   (julia . t)
+   (racket . t)
+   (lisp . t)
+   (shell . t)
+   ;; (erlang . t)
+   (js . t)
+   (C . t)
+   (haskell . t)
+   (makefile .t)
+   (scheme . t)
+   (ditaa .t)))
+#+END_SRC
+
+#+RESULTS:
+
+**** sly in org                                                 :notangle:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
+#+begin_src elisp
+(defcustom org-babel-lisp-eval-fn
+  '("slime-eval" "sly-eval")
+  "The function to be called to evaluate code on the lisp side."
+  :group 'org-babel
+  :version "24.1"
+  :type 'listp)
+
+(defun org-babel-execute:lisp (body params)
+  "Execute a block of Common Lisp code with Babel."
+  (pcase org-babel-lisp-eval-fn
+    ("slime-eval" (require 'slime))
+    ("sly-eval" (require 'sly)))
+  (org-babel-reassemble-table
+   (let ((result
+          (funcall (if (member "output" (cdr (assoc :result-params params)))
+                       #'car #'cadr)
+                   (with-temp-buffer
+                     (insert (org-babel-expand-body:lisp body params))
+                     (funcall org-babel-lisp-eval-fn
+                              `(swank:eval-and-grab-output
+                                ,(let ((dir (if (assoc :dir params)
+                                                (cdr (assoc :dir params))
+                                              default-directory)))
+                                   (format
+                                    (if dir (format org-babel-lisp-dir-fmt dir)
+                                      "(progn %s\n)")
+                                    (buffer-substring-no-properties
+                                     (point-min) (point-max)))))
+                              (cdr (assoc :package params)))))))
+     (org-babel-result-cond (cdr (assoc :result-params params))
+       result
+       (condition-case nil
+           (read (org-babel-lisp-vector-to-list result))
+         (error result))))
+   (org-babel-pick-name (cdr (assoc :colname-names params))
+                        (cdr (assoc :colnames params)))
+   (org-babel-pick-name (cdr (assoc :rowname-names params))
+                        (cdr (assoc :rownames params)))))
+#+end_src
+
+#+RESULTS:
+: org-babel-execute:lisp
+
+* installed package list and ref
+** org-wiki
+** org-wild-notifier
+:PROPERTIES:
+:url:      https://github.com/akhramov/org-wild-notifier.el
+:END:
+** org-download
+** org-brain
+** org-fs-tree                                                  :manualpack:
+** org-protocol-capture-html                                    :manualpack:
+** org-web-tools
+** org-super-agenda
+** org-cliplink
+** org-books
+** org-board
+** org-ref
+
+** ide
+** general text
+
+* misc
+** live code
+*** free keybindings
+#+begin_src elisp
+;;; free-keys.el --- Show free keybindings for modkeys or prefixes
+
+;; Copyright (C) 2013 Matus Goljer
+
+;; Author: Matus Goljer <matus.goljer@gmail.com>
+;; Maintainer: Matus Goljer <matus.goljer@gmail.com>
+;; Version: 0.1
+;; Created: 3rd November 2013
+;; Keywords: convenience
+;; Package-Requires: ((cl-lib "0.3"))
+;; URL: https://github.com/Fuco1/free-keys
+
+;; This file is not part of GNU Emacs.
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Show free keybindings for modkeys or prefixes. Based on code
+;; located here: https://gist.github.com/bjorne/3796607
+;;
+;; For complete description see https://github.com/Fuco1/free-keys
+
+;;; Code:
+
+(require 'cl-lib)
+
+(defgroup free-keys ()
+  "Free keys."
+  :group 'convenience)
+
+(defcustom free-keys-modifiers '("" "C" "M" "C-M")
+  "List of modifiers that can be used in front of keys."
+  :type '(repeat string)
+  :group 'free-keys)
+
+(defcustom free-keys-keys "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-=[]{};'\\:\"|,./<>?`~"
+  "String or list of keys that can be used as bindings.
+In case of string, each letter is interpreted as a character to
+test.
+In case of list, each item is considered as key code.  This
+allows you to add keys such as TAB or RET."
+  :type '(choice
+          (string :tag "String of characters")
+          (repeat :tag "List of characters" string))
+  :group 'free-keys)
+
+(defcustom free-keys-ignored-bindings nil
+  "List of bindings with modifiers which should never be considered free.
+The elements could be either strings of form \"MOD-KEY\" or cons
+where the car is a single letter modifier as in
+`free-keys-modifiers' and the cdr is a string containing keys to
+be ignored with this modifiers, like `free-keys-keys'.
+The bindings should not contain a prefix.  This can typically be
+used to ignore bindings intercepted by the window manager used
+for swapping windows and similar operations."
+  :type '(repeat (choice (string :tag "Key binding")
+                         (cons :tag "Modifier and string of key bindings"
+                               (string :tag "Modifier")
+                               (string :tag "Key bindings"))))
+  :group 'free-keys)
+
+(defun free-keys-ignored-bindings ()
+  "Return a list of bindings that should never be considered free.
+The elements of the returned list are of form \"MOD-KEY\".
+See also the variable `free-keys-ignored-bindings'."
+  (apply 'append
+         (mapcar (lambda (x)
+                   (if (stringp x) (list x)
+                     (mapcar (lambda (y)
+                               (concat (car x) "-" (char-to-string y)))
+                             (cdr x))))
+                 free-keys-ignored-bindings)))
+
+(defvar free-keys-mode-map
+  (let ((map (make-keymap)))
+    (define-key map "b" 'free-keys-change-buffer)
+    (define-key map "p" 'free-keys-set-prefix)
+    map)
+  "Keymap for Free Keys mode.")
+
+(defvar free-keys-original-buffer nil
+  "Buffer from which `free-keys' was called.")
+
+(defun free-keys--print-in-columns (key-list &optional columns)
+  "Print the KEY-LIST into as many columns as will fit into COLUMNS characters.
+The columns are ordered according to variable `free-keys-keys',
+advancing down-right.  The margin between each column is 5 characters."
+  (setq columns (or columns 80))
+  (let* ((len (+ 5 (length (car key-list))))
+         (num-of-keys (length key-list))
+         (cols (/ columns len))
+         (rows (1+ (/ num-of-keys cols)))
+         (rem (mod num-of-keys cols))
+         (cur-col 0)
+         (cur-row 0))
+    (dotimes (i num-of-keys)
+      (insert (nth
+               (+ (* cur-col rows) cur-row (if (> cur-col rem) (- rem cur-col) 0))
+               key-list)
+              "     ")
+      (cl-incf cur-col)
+      (when (= cur-col cols)
+        (insert "\n")
+        (setq cur-col 0)
+        (cl-incf cur-row)))))
+
+(defun free-keys-set-prefix (prefix)
+  "Change the prefix in current *Free keys* buffer to PREFIX and
+update the display."
+  (interactive "sPrefix: ")
+  (free-keys prefix free-keys-original-buffer))
+
+(defun free-keys-change-buffer (buffer)
+  "Change the buffer for which the bindings are displayed to
+BUFFER and update the display."
+  (interactive "bShow free bindings for buffer: ")
+  (free-keys nil (get-buffer-create buffer)))
+
+(defun free-keys-revert-buffer (_ignore-auto _noconfirm)
+  "Revert the *Free keys* buffer.
+This simply calls `free-keys'."
+  (free-keys nil free-keys-original-buffer))
+
+(defun free-keys--process-modifier (prefix modifier)
+  "Process free bindings for MODIFIER."
+  (let (empty-keys)
+    (mapc (lambda (key)
+            (let* ((key-as-string (cond
+                                   ((characterp key) (char-to-string key))
+                                   ((stringp key) key)
+                                   (t (error "Key is not a character nor a string"))))
+                   (key-name
+                    (if (not (equal modifier ""))
+                        (concat modifier "-" key-as-string)
+                      key-as-string))
+                   (full-name
+                    (if (and prefix (not (equal prefix ""))) (concat prefix " " key-name) key-name))
+                   (binding
+                    (with-current-buffer free-keys-original-buffer (key-binding (read-kbd-macro full-name)))))
+              (when (and (not (member key-name (free-keys-ignored-bindings)))
+                         (or (not binding)
+                             (eq binding 'undefined)))
+                (push full-name empty-keys))))
+          free-keys-keys)
+    (let ((len (length empty-keys)))
+      (when (> len 0)
+        (if (not (equal modifier ""))
+            (insert (format "With modifier %s (%d free)\n=========================\n" modifier len))
+          (insert (format "With no modifier (%d free)\n=========================\n" len)))
+        (free-keys--print-in-columns (nreverse empty-keys))
+        (insert "\n\n")))))
+
+;;;###autoload
+(defun free-keys (&optional prefix buffer)
+  "Display free keys in current buffer.
+A free key is a key that has no associated key-binding as
+determined by function `key-binding'.
+By default, keys on `free-keys-keys' list with no prefix sequence
+are considered, possibly together with modifier keys from
+`free-keys-modifiers'.  You can change the prefix sequence by
+hitting 'p' in the *Free keys* buffer.  Prefix is supplied in
+format recognized by `kbd', for example \"C-x\"."
+  (interactive (list (when current-prefix-arg
+                       (read-from-minibuffer "Prefix: "))))
+  (setq prefix (or prefix ""))
+  (setq free-keys-original-buffer (or buffer (current-buffer)))
+  (let ((buf (get-buffer-create "*Free keys*")))
+    (pop-to-buffer buf)
+    (with-current-buffer buf
+      (if (fboundp 'read-only-mode)
+          (read-only-mode -1)
+        (setq buffer-read-only nil))
+      (erase-buffer)
+      (insert "Free keys"
+              (if (not (equal prefix "")) (format " with prefix %s" prefix) "")
+              " in buffer "
+              (buffer-name free-keys-original-buffer)
+              " (major mode: " (with-current-buffer free-keys-original-buffer (symbol-name major-mode)) ")\n\n")
+      (mapc (lambda (m) (free-keys--process-modifier prefix m)) free-keys-modifiers)
+      (setq buffer-read-only t)
+      (goto-char 0)
+      (free-keys-mode))))
+
+(define-derived-mode free-keys-mode special-mode "Free Keys"
+  "Free keys mode.
+Display the free keybindings in current buffer.
+\\{free-keys-mode-map}"
+  (set (make-local-variable 'revert-buffer-function) 'free-keys-revert-buffer)
+  (set (make-local-variable 'header-line-format) "Help: (b) change buffer (p) change prefix (q) quit"))
+
+(provide 'free-keys)
+;;; free-keys.el ends here
+
+#+end_src
+
+#+RESULTS:
+: free-keys
+
+
+*** inbuffer settings
+
+#+NAME: Lecture 2 Wildberger Algebraic topology
+#+ATTR_ORG: :width 200/250/300/400/500/600
+
+
+** configs
+https://github.com/rememberYou/.emacs.d/blob/master/config.org
+https://emacs.christianbaeuerlein.com/my-org-config.html
+http://aaronbedra.com/emacs.d/#org-habit
+https://github.com/fuxialexander/doom-emacs-private-xfu/blob/master/modules/lang/org-private/config.el
+https://karl-voit.at/2014/12/03/emacs-chat/
+https://joshrollinswrites.com/emacsorg/org-capture-template-1/
+https://github.com/daviwil/dotfiles/blob/master/emacs/config/org-mode.el
+
+
+
+** capture-templates
