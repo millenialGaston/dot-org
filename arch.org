@@ -2,6 +2,9 @@
 #+author: frederic.boilea
 #+html_head: <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
 * myconf
+:PROPERTIES:
+:header-args: :tangle :mkdirp yes
+:END:
 ** i3                                                               :stable:
 :PROPERTIES:
 :header-args: :tangle ~/.config/mpd/mpd.conf :comments link
@@ -396,11 +399,39 @@ general {
   color_bad = "#FF5555"
 }
 #+END_SRC
+*** dracula theme                                                :notangle:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
+#+begin_src conf
+set $bgb             #282a36
+set $bg             #282a36AA
+set $fg             #f8f8f2
+set $tf             #f8f8f2AA
+set $hi             #f1fa7c
+set $tx             #040404
+set $pk             #ff79c6
+# yellow
+set $yw             #f1fa7c
+# green
+set $gn             #50fa7b
+# red
+set $rd             #ff5555
+set $id             #ff79c6
+
+# set some nice colors      border  background  text  indicator
+client.focused              $id     $pk         $tx     $id
+client.unfocused            $bg     $bg         $tf     $id
+client.focused_inactive     $bg     $bg         $pk     $id
+client.urgent               $yw     $yw         $tx     $id
+#border & indicator are ignored
+client.placeholder          $bg     $bg         $bg     $bg
+#+end_src
 ** tmux
 #+begin_src conf :tangle ~/.tmux.conf :comments link
-unbind C-b
-set -g prefix C-s
-bind-key -r C-s send-prefix
+#unbind C-b
+#set -g prefix C-s
+# bind-key -r C-s send-prefix
 bind-key -n C-a send-prefix
 bind r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
 setw -g mouse on
@@ -757,9 +788,10 @@ antigen bundle fzf
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle djui/alias-tips
 antigen bundle mafredri/zsh-async
-antigen bundle
+antigen bundle pipenv
 antigen bundle npm
-antigen bundle yourfin/pure-agnoster
+#antigen bundle yourfin/pure-agnoster
+antigen bundle sindresorhus/pure
 antigen apply
 #+END_SRC
 
@@ -836,11 +868,12 @@ alias journalctl='sudo journalctl'
 alias systemctl='sudo systemctl'
 
 alias c='clear'
+alias e='emacsclient -create-frame --alternate-editor=""'
 alias cp='cp -i'
 alias mv='mv -i'
 alias j='jobs'
 alias o='xdg-open'
-alias r='ranger'
+alias r='hunter'
 alias tma='tmux attach-session -t'
 alias m='pulsemixer'
 alias n='nvim'
@@ -851,17 +884,379 @@ alias weather='curl -H \"Accept-Language: fr\" wttr.in/montreal'
 
 #+END_SRC
 
-** TODO ranger
-** TODO clipboard management
-[[https://www.reddit.com/r/archlinux/comments/9v5yhr/which_clipboard_manager_do_you_use/][Which clipboard manager do you use? : archlinux]]
-https://github.com/astrand/xclip
-https://github.com/gilbertw1/roficlip
-https://github.com/mrichar1/clipster
-** TODO screenshots/captures
-*** maim/xclip scripts
-** TODO rofi
-** HOLD conky
+** ssh                                                               :notangle:
 
+#+begin_quote
+The purpose of ssh group was described on Unix. There is no gain by adding user
+to ssh group, because the group is used only for pre-authentication process.
+
+If you want to use a group to limit who can log in to your server using ssh,
+create a group sshuser, add AllowGroups sshuser to your /etc/ssh/sshd_config and
+restart your ssh service.
+#+end_quote
+
+** nvim
+
+#+name:plug
+#+begin_src conf :tangle ~/.config/nvim/init.vim :comments link
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+  silent !curl -fLo ~/.nvim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall
+endif
+
+call plug#begin('~/.config/nvim/plugged')
+Plug 'luochen1990/rainbow'
+let g:rainbow_active = 1
+Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+Plug 'pelodelfuego/vim-swoop'
+Plug 'tpope/vim-speeddating'
+Plug 'jceb/vim-orgmode'
+
+
+Plug 'zhou13/vim-easyescape'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-commentary'
+Plug 'easymotion/vim-easymotion'
+Plug 'farmergreg/vim-lastplace'
+Plug 'airblade/vim-gitgutter'
+Plug 'Chiel92/vim-autoformat'
+Plug 'ntpeters/vim-better-whitespace'
+Plug 'jiangmiao/auto-pairs'
+Plug 'maxbrunsfeld/vim-yankstack'
+Plug 'pbrisbin/vim-mkdir'
+Plug 'thinca/vim-quickrun'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-surround'
+Plug 'itchyny/lightline.vim'
+Plug 'w0rp/ale'
+
+Plug 'junegunn/fzf', { 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+
+Plug 'cocopon/iceberg.vim'
+Plug 'sjl/badwolf'
+call plug#end()
+#+end_src
+
+#+name:visual
+#+begin_src conf :tangle ~/.config/nvim/init.vim :comments link
+nnoremap gev :e $MYVIMRC<CR>
+nnoremap gsv :so $MYVIMRC<CR>
+set clipboard=unnamedplus
+
+augroup Rc
+  autocmd!
+augroup END
+
+set autoread
+set nobackup
+set nolazyredraw
+set nowritebackup
+set swapfile
+set tildeop
+set ttyfast
+set visualbell
+set wildmenu
+set wildmode=full
+filetype plugin indent on
+autocmd Rc BufWinEnter * set mouse=
+
+set autoindent
+set list
+set shiftround
+set shiftwidth=2
+set smartindent
+set smarttab
+set tabstop=2
+set expandtab
+
+syntax on
+set backspace=indent,eol,start
+set colorcolumn=80
+set completeopt=menu
+set cursorline
+set hlsearch
+set inccommand=nosplit
+set incsearch
+set number
+set relativenumber
+set shortmess=a
+set showcmd
+set showmatch
+set showmode
+set splitbelow
+set splitright
+set wrap
+#+end_src
+
+#+name:shortcuts
+#+begin_src conf :tangle ~/.config/nvim/init.vim :comments link
+autocmd Rc BufEnter * EnableStripWhitespaceOnSave
+nnoremap <expr> j v:count ? 'j' : 'gj'
+nnoremap <expr> k v:count ? 'k' : 'gk'
+nnoremap gj j
+nnoremap gk k
+nnoremap <esc><esc> :nohlsearch<cr>
+nnoremap Y y$
+
+let g:easyescape_chars = { "j": 1, "k": 1 }
+let g:easyescape_timeout = 30
+cnoremap jk <ESC>
+cnoremap kj <ESC>
+
+
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
+
+
+inoremap <c-a> <Home>
+inoremap <c-b> <Left>
+inoremap <c-e> <End>
+inoremap <c-f> <Right>
+inoremap <M-b> <C-O>b
+inoremap <M-f> <C-O>w
+inoremap <M-b> <C-O>b
+inoremap <M-f> <C-O>w
+inoremap <c-k> <Esc>lDa
+inoremap <c-u> <Esc>d0xi
+inoremap <c-y> <Esc>Pa
+inoremap <c-x><c-s> <Esc>:w<CR>
+#+end_src
+
+#+name:fzf
+#+begin_src conf :tangle ~/.config/nvim/init.vim :comments link
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
+      \ 'prefix': '^.*$',
+      \ 'source': 'rg -n ^ --color always',
+      \ 'options': '--ansi --delimiter : --nth 3..',
+      \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
+"words completion
+"inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
+
+let g:fzf_action = {
+      \ 'ctrl-t': 'tab split',
+      \ 'ctrl-x': 'split',
+      \ 'ctrl-v': 'vsplit' }
+
+let g:fzf_layout = { 'down': '~40%' }
+
+let g:fzf_layout = { 'window': 'enew' }
+let g:fzf_layout = { 'window': '-tabnew' }
+let g:fzf_layout = { 'window': '10new' }
+let g:fzf_colors =  {
+      \ 'fg':      ['fg', 'Normal'],
+      \ 'bg':      ['bg', 'Normal'],
+      \ 'hl':      ['fg', 'Comment'],
+      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+      \ 'hl+':     ['fg', 'Statement'],
+      \ 'info':    ['fg', 'PreProc'],
+      \ 'border':  ['fg', 'Ignore'],
+      \ 'prompt':  ['fg', 'Conditional'],
+      \ 'pointer': ['fg', 'Exception'],
+      \ 'marker':  ['fg', 'Keyword'],
+      \ 'spinner': ['fg', 'Label'],
+      \ 'header':  ['fg', 'Comment'],
+      \}
+#+end_src
+
+#+name:which-key
+#+begin_src conf :tangle ~/.config/nvim/init.vim :comments link
+autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map')
+let g:mapleader = "\<Space>"
+let g:maplocalleader = ','
+nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
+vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
+nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
+set timeoutlen=200
+let g:which_key_map =  {}
+let g:which_key_map['g'] = {
+      \ 'name' : '+git fugitive',
+      \ 's': ['Gstatus' , 'status'],
+      \ 'd': ['Gdiff' , 'diff'],
+      \ 'e': ['Gedit' , 'edit'],
+      \ }
+
+let g:which_key_map['f']= {
+      \ 'name' : '+find' ,
+      \ 'F' : ['Files' , 'files'],
+      \ 'f' : ['GitFiles' , 'git files'],
+      \ 't' : ['BTags' , 'buffer tags'],
+      \ 'T' : ['Tags' , 'all buffer tags'],
+      \ 'b' : ['Buffers'  , 'search buffers' ],
+      \ 'h' : ['History' , 'history'],
+      \ 'r' : ['Rg', 'rip'],
+      \ 'l' : ['Lines' , 'Lines'],
+      \ 'w' : ['Helptags' , 'Help'],
+      \ }
+
+let g:which_key_map['w'] = {
+      \ 'name' : '+windows' ,
+      \ 'w' : ['<C-W>w'     , 'other-window']          ,
+      \ 'd' : ['<C-W>c'     , 'delete-window']         ,
+      \ '-' : ['<C-W>s'     , 'split-window-below']    ,
+      \ '|' : ['<C-W>v'     , 'split-window-right']    ,
+      \ '2' : ['<C-W>v'     , 'layout-double-columns'] ,
+      \ 'h' : ['<C-W>h'     , 'window-left']           ,
+      \ 'j' : ['<C-W>j'     , 'window-below']          ,
+      \ 'l' : ['<C-W>l'     , 'window-right']          ,
+      \ 'k' : ['<C-W>k'     , 'window-up']             ,
+      \ 'H' : ['<C-W>5<'    , 'expand-window-left']    ,
+      \ 'J' : ['resize +5'  , 'expand-window-below']   ,
+      \ 'L' : ['<C-W>5>'    , 'expand-window-right']   ,
+      \ 'K' : ['resize -5'  , 'expand-window-up']      ,
+      \ '=' : ['<C-W>='     , 'balance-window']        ,
+      \ 's' : ['<C-W>s'     , 'split-window-below']    ,
+      \ 'v' : ['<C-W>v'     , 'split-window-below']    ,
+      \ '?' : ['Windows'    , 'fzf-window']            ,
+      \ 'm' : ['only'   ,      'maximize']                   ,
+      \ }
+
+#+end_src
+
+#+name:plugin-settings
+#+begin_src conf :tangle ~/.config/nvim/init.vim :comments link
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#auto_complete_start_length = 1
+
+
+let g:current_line_whitespace_disabled_soft=1
+let g:defaultWinSwoopHeight = 15
+
+"" auto-pairs
+let g:AutoPairsMapCh = 0
+let g:AutoPairsMapCR = 0
+let g:AutoPairsShortcutBackInsert='<M-i>'
+
+"" autoformat
+autocmd Rc BufEnter,BufWinEnter,BufRead,BufNewFile *
+      \ if &filetype == "" | set filetype=text | endif
+autocmd Rc BufWrite * :Autoformat
+
+let g:lightline = { 'colorscheme': 'iceberg' }
+colorscheme iceberg
+highlight Normal      ctermbg=none
+highlight NonText     ctermbg=none
+highlight EndOfBuffer ctermbg=none
+highlight VertSplit   cterm=none ctermfg=240 ctermbg=240
+
+
+command! -bang -nargs=? -complete=dir Files
+      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+command! -bang -nargs=* Rg
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+      \   <bang>0 ? fzf#vim#with_preview('up:60%')
+      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \   <bang>0)
+
+command! -bang Colors
+      \ call fzf#vim#colors({'left': '15%', 'options': '--reverse --margin 30%,0'}, <bang>0)
+
+
+"functions
+function! s:fzf_statusline()
+  " Override statusline as you like
+  highlight fzf1 ctermfg=161 ctermbg=251
+  highlight fzf2 ctermfg=23 ctermbg=251
+  highlight fzf3 ctermfg=237 ctermbg=251
+  setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+endfunction
+autocmd! User FzfStatusLine call <SID>fzf_statusline()
+
+
+function! DeleteFileSwaps()
+  write
+  let l:output = ''
+  redir => l:output
+  silent exec ':sw'
+  redir END
+  let l:current_swap_file = substitute(l:output, '\n', '', '')
+  let l:base = substitute(l:current_swap_file, '\v\.\w+$', '', '')
+  let l:swap_files = split(glob(l:base.'\.s*'))
+  " delete all except the current swap file
+  for l:swap_file in l:swap_files
+    if !empty(glob(l:swap_file)) && l:swap_file != l:current_swap_file
+      call delete(l:swap_file)
+      echo "swap file removed: ".l:swap_file
+    endif
+  endfor
+  " Reset swap file extension to `.swp`.
+  set swf! | set swf!
+  echo "Reset swap file extension for file: ".expand('%')
+endfunction
+command! DeleteFileSwaps :call DeleteFileSwaps()
+#+end_src
+
+** hunter
+#+begin_src conf :tangle ~/.config/hunter/config :comments link
+animation=on
+show_hidden=on
+select_cmd=find -type f | fzf -m
+cd_cmd=find -type d | fzf
+icons=on
+ratios=20,30,49
+animation_refresh_frequency=60
+media_autostart=on
+media_mute=off
+media_previewer=hunter-media
+graphics_mode=auto (other choices: kitty/sixel/unicode)
+#+end_src
+
+** conky
+#+begin_src conf :tangle ~/.conkyrc :comments link
+background no
+update_interval 1
+cpu_avg_samples 2
+net_avg_samples 2
+double_buffer yes
+no_buffers yes
+text_buffer_size 2048
+own_window yes
+own_window_transparent yes
+own_window_hints undecorated,sticky,skip_taskbar,skip_pager,below
+border_inner_margin 0
+border_outer_margin 0
+minimum_size 500 300
+alignment tr
+draw_shades no
+use_xft yes
+xftfont monospace:size=10
+xftalpha 0.1
+default_color 99A9B8
+lua_load ~/.lua/scripts/rings.lua
+lua_draw_hook_pre rings
+
+TEXT
+${voffset 82}${font neuropol}CPU${goto 160}${font}Usage${alignr 106}${cpu}%
+${goto 160}Temperature${alignr 106}${acpitemp}°C
+${voffset 129}${font neuropol}MEMORY${goto 160}${font}Memory${alignr 106}${memperc}%
+${goto 160}Swap${alignr 106}${swapperc}%
+${voffset 129}${font neuropol}FILESYSTEMS${goto 160}${font}${execi 1 df | grep ^/dev | sed -n 1p | awk '{ print $6 }'}${alignr 106}${execi 1 df -h | grep ^/dev | sed -n 1p | awk '{ print $3 " / " $2 }'}
+${goto 160}${execi 1 df | grep ^/dev | sed -n 3p | awk '{ print $6 }'}${alignr 106}${execi 1 df -h | grep ^/dev | sed -n 3p | awk '{ print $3 " / " $2 }'}
+${goto 160}${execi 1 df | grep ^/dev | sed -n 4p | awk '{ print $6 }'}${alignr 106}${execi 1 df -h | grep ^/dev | sed -n 4p | awk '{ print $3 " / " $2 }'}
+${goto 160}${execi 1 df | grep ^/dev | sed -n 5p | awk '{ print $6 }'}${alignr 106}${execi 1 df -h | grep ^/dev | sed -n 5p | awk '{ print $3 " / " $2 }'}
+${voffset 99}${font neuropol}NETWORK${goto 160}${font}eno1 down${alignr 106}${downspeed eno1}
+${goto 160}wlo1 down${alignr 106}${downspeed wlo1}
+${goto 160}eno1 up${alignr 106}${upspeed eno1}
+${goto 160}wlo1 up${alignr 106}${upspeed wlo1}
+#+end_src
 
 * packages
 ** livecli                                                             :aur:

@@ -162,6 +162,9 @@ http://manuel-uberti.github.io/emacs/2016/06/06/spellchecksetup/
 ;; (load "~/temp/dotfiles/emacsy/packages/my-doom-themes-ext-org.el")
 
 (require 'doom-themes)
+(use-package doom-modeline
+      :ensure t
+      :hook (after-init . doom-modeline-mode))
 (setq doom-themes-enable-bold t
       doom-themes-enable-italic t)
 ;; (doom-themes-org-config)
@@ -243,51 +246,6 @@ http://manuel-uberti.github.io/emacs/2016/06/06/spellchecksetup/
 
 #+RESULTS:
 : counsel-rg
-
-** broken doom modeline                                           :notangle:
-:PROPERTIES:
-:header-args: :tangle yes
-:END:
-#+BEGIN_SRC elisp
-(use-package doom-modeline)
-(doom-modeline-mode 1)
-#+end_src
-
-#+RESULTS:
-: t
-
-*** customize
-#+begin_src elisp
-(setq doom-modeline-height 25)
-(setq doom-modeline-bar-width 3)
-(setq doom-modeline-buffer-file-name-style 'truncate-upto-project)
-(setq doom-modeline-icon t)
-(setq doom-modeline-major-mode-icon t)
-(setq doom-modeline-major-mode-color-icon t)
-(setq doom-modeline-persp-name t)
-(setq doom-modeline-buffer-state-icon t)
-(setq doom-modeline-buffer-modification-icon t)
-(setq doom-modeline-minor-modes nil)
-(setq doom-modeline-enable-word-count nil)
-(setq doom-modeline-buffer-encoding t)
-(setq doom-modeline-indent-info nil)
-(setq doom-modeline-checker-simple-format t)
-(setq doom-modeline-vcs-max-length 12)
-(setq doom-modeline-persp-name t)
-(setq doom-modeline-lsp t)
-(setq doom-modeline-github nil)
-(setq doom-modeline-github-interval (* 30 60))
-(setq doom-modeline-env-version t)
-(setq doom-modeline-env-enable-python t)
-
-;; Change the executables to use for the language version string
-(setq doom-modeline-env-python-executable "python")
-(setq doom-modeline-irc t)
-(setq doom-modeline-irc-stylize 'identity)
-#+end_src
-
-#+RESULTS:
-: identity
 
 ** stable tempom
 som text
@@ -487,7 +445,6 @@ some text
 ** always links
 https://tasshin.com/blog/implementing-a-second-brain-in-empty-keys-and-org-mode/
 https://lepisma.xyz
-
 ** stable basic set keys and variables
 :PROPERTIES:
 :header-args: :tangle yes
@@ -588,7 +545,7 @@ mostly from https://lepisma.xyz/2017/10/28/ricing-org-mode/index.html
    (lambda ()
      (org-archive-subtree)
      (setq org-map-continue-from (outline-previous-heading)))
-   "/done" 'tree))
+   "/DONE" 'tree))
 
 (defun custom-org-cliplink ()
   (interactive)
@@ -797,6 +754,10 @@ example:
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
 
+(add-to-list 'load-path "/home/gaston/.opam/4.07.1/share/emacs/site-lisp")
+(require 'ocp-indent)
+
+
 ;; (setq erlang-root-dir "/usr/lib/erlang")
 ;; (add-to-list 'load-path "/usr/lib/erlang/lib/tools-3.2.1/emacs")
 ;; (add-to-list 'load-path "~/dotfiles/emacsy/packages/stable-packages/ob-erlang")
@@ -804,6 +765,9 @@ example:
 ;; (require 'erlang-start)
 ;; (require 'ob-erlang)
 #+end_src
+
+#+RESULTS:
+: ocp-indent
 
 *** inprog ggtags
 :PROPERTIES:
@@ -1182,3 +1146,4 @@ https://github.com/daviwil/dotfiles/blob/master/emacs/config/org-mode.el
 
 
 ** capture-templates
+zqktlwi4i34kbat3.onion

@@ -43,36 +43,6 @@
   :config
   (rg-enable-default-bindings))
 
-(use-package doom-modeline)
-(doom-modeline-mode 1)
-
-(setq doom-modeline-height 25)
-(setq doom-modeline-bar-width 3)
-(setq doom-modeline-buffer-file-name-style 'truncate-upto-project)
-(setq doom-modeline-icon t)
-(setq doom-modeline-major-mode-icon t)
-(setq doom-modeline-major-mode-color-icon t)
-(setq doom-modeline-persp-name t)
-(setq doom-modeline-buffer-state-icon t)
-(setq doom-modeline-buffer-modification-icon t)
-(setq doom-modeline-minor-modes nil)
-(setq doom-modeline-enable-word-count nil)
-(setq doom-modeline-buffer-encoding t)
-(setq doom-modeline-indent-info nil)
-(setq doom-modeline-checker-simple-format t)
-(setq doom-modeline-vcs-max-length 12)
-(setq doom-modeline-persp-name t)
-(setq doom-modeline-lsp t)
-(setq doom-modeline-github nil)
-(setq doom-modeline-github-interval (* 30 60))
-(setq doom-modeline-env-version t)
-(setq doom-modeline-env-enable-python t)
-
-;; Change the executables to use for the language version string
-(setq doom-modeline-env-python-executable "python")
-(setq doom-modeline-irc t)
-(setq doom-modeline-irc-stylize 'identity)
-
 (require 'org-tempo)
 (setq tempo-interactive t)
 (tempo-define-template "my-property"
@@ -253,6 +223,10 @@
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
 
+(add-to-list 'load-path "/home/gaston/.opam/4.07.1/share/emacs/site-lisp")
+(require 'ocp-indent)
+
+
 ;; (setq erlang-root-dir "/usr/lib/erlang")
 ;; (add-to-list 'load-path "/usr/lib/erlang/lib/tools-3.2.1/emacs")
 ;; (add-to-list 'load-path "~/dotfiles/emacsy/packages/stable-packages/ob-erlang")
@@ -339,6 +313,9 @@
 ;; (load "~/temp/dotfiles/emacsy/packages/my-doom-themes-ext-org.el")
 
 (require 'doom-themes)
+(use-package doom-modeline
+      :ensure t
+      :hook (after-init . doom-modeline-mode))
 (setq doom-themes-enable-bold t
       doom-themes-enable-italic t)
 ;; (doom-themes-org-config)
