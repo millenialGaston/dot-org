@@ -798,16 +798,16 @@ antigen apply
 
 ** irssi
 :PROPERTIES:
-:header-args: :tangle ~/.irssi/config
+:header-args: :tangle ~/.irssi/config :comments link
 :END:
 #+BEGIN_SRC conf
 servers = (
   {
-    address = "irc.freenode.net";
-    chatnet = "freenode";
-    port = "6667";
-    use_ssl = "yes";
-    ssl_verify = "yes";
+    address = "chat.freenode.net";
+    chatnet = "Freenode";
+    port = "6697";
+    use_tls = "yes";
+    tls_verify = "yes";
     autoconnect = "yes";
   }
 );
@@ -815,21 +815,37 @@ servers = (
 chatnets = {
   Freenode = {
     type = "IRC";
-    autosendcmd = "/msg nickserv identify ouestbillie /i!R\"[*2x;%
+    autosendcmd = "/msg NickServ identify ouestbillie /i!R\"[*2x;%";
+    sasl_mechanism = "PLAIN";
+    sasl_username = "ouestbillie";
+    sasl_password = "/i!R\"[*2x;%";
   };
 };
 
 channels = (
-  { name = "#test-channel"; chatnet = "Freenode"; autojoin = "Yes"; }
-  { name = "#private-test-channel"; chatnet = "Freenode"; password = "password1"; autojoin = "Yes"; }
+  {
+    name = "#private-test-channel";
+    chatnet = "Freenode";
+    password = "password1";
+    autojoin = "Yes";
+  }
 );
 
 settings = {
-  core = { real_name = "cedric beaucage"; user_name = "gaston"; nick = "ouestbillie"; };
-  "fe-text" = { actlist_sort = "refnum"; term_force_colors = "yes"; scrollback_time = "7day "; };
+  core = {
+    real_name = "cedric beaucage";
+    user_name = "ouestbillie";
+    nick = "ouestbillie";
+  };
+  "fe-text" = {
+    actlist_sort = "refnum";
+    term_force_colors = "yes";
+    scrollback_time = "7day ";
+  };
   "fe-common/core" = { theme = "default"; };
 };
 #+END_SRC
+*** TODO statusbar
 
 ** compton                                                          :stable:
 :PROPERTIES:
@@ -952,7 +968,6 @@ if [ -f "${SSH_ENV}" ]; then
 else
 #+end_src
 
-
 ** nvim
 *** plug
 #+name:plug
@@ -1053,7 +1068,7 @@ endif
 
 #+end_src
 
-
+*** visual
 #+name:visual
 #+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
 nnoremap gev :e $MYVIMRC<CR>
@@ -1105,6 +1120,7 @@ set splitright
 set wrap
 #+end_src
 
+*** shortcuts
 #+name:shortcuts
 #+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
 autocmd Rc BufEnter * EnableStripWhitespaceOnSave
@@ -1143,6 +1159,7 @@ inoremap <c-y> <Esc>Pa
 inoremap <c-x><c-s> <Esc>:w<CR>
 #+end_src
 
+*** fzf
 #+name:fzf
 #+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
 imap <c-x><c-k> <plug>(fzf-complete-word)
@@ -1241,6 +1258,7 @@ let g:which_key_map['w'] = {
 
 #+end_src
 
+*** plugin settings
 #+name:plugin-settings
 #+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
 let g:deoplete#enable_at_startup = 1
@@ -1264,7 +1282,7 @@ highlight EndOfBuffer ctermbg=none
 highlight VertSplit   cterm=none ctermfg=240 ctermbg=240
 
 #+end_src
-
+*** commands
 #+name:commands
 #+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
 command! -bang -nargs=? -complete=dir Files
@@ -1280,7 +1298,7 @@ command! -bang -nargs=* Rg
 command! -bang Colors
       \ call fzf#vim#colors({'left': '15%', 'options': '--reverse --margin 30%,0'}, <bang>0)
 #+end_src
-
+*** functions
 #+name:functions
 #+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
 function! s:fzf_statusline()
