@@ -969,6 +969,7 @@ else
 #+end_src
 
 ** nvim
+
 *** plug
 #+name:plug
 #+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
