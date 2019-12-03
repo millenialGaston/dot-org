@@ -6,6 +6,17 @@
 #+ATTR_ORG: :width 200/250/300/400/500/600
 #+TODO: always(a) fixme(r) next(n) todo(t) inprog(p) stable(d) idea(i) project(j) wait(w) | broken(b)
 
+* idea irc
+:PROPERTIES:
+:header-args: :tangle no
+:END:
+#+BEGIN_SRC emacs-lisp
+#+END_SRC
+
+#+RESULTS:
+| chat.freenode.net | :tls | t | :nick | ouestbillie | :sasl-username | ouestbillie | :sasl-password | /i!R"[*2x;%s | :port | 6667 | :channels | (#emacs-circe) |
+
+
 * todo future
 ** always packages
 *** memacs
@@ -43,7 +54,6 @@ https://sachachua.com/blog/
 https://www.gnu.org/software/emacs/manual/html_mono/eintr.html
 https://cestlaz.github.io/stories/emacs/
 
-
 ** next stabilize org-fs-tree
 #+begin_src emacs-lisp
 (require 'org-fs-tree)
@@ -70,7 +80,7 @@ https://cestlaz.github.io/stories/emacs/
 (pr-update-menus t)
 #+end_src
 
-** project [#A] email
+** project [#C] email
 ** project [#B] setup web
 - https://www.emacswiki.org/emacs/emacs-w3m
 
@@ -140,7 +150,6 @@ http://manuel-uberti.github.io/emacs/2016/06/06/spellchecksetup/
 ** stable ui
 #+BEGIN_SRC emacs-lisp
 (set-default-font "Iosevka Nerd Font 12")
-
 (set-face-attribute 'default nil :family "Iosevka Nerd Font" :height 130)
 (set-face-attribute 'fixed-pitch nil :family "Iosevka Nerd Font")
 (set-face-attribute 'variable-pitch nil :family "EtBembo")
@@ -162,24 +171,30 @@ http://manuel-uberti.github.io/emacs/2016/06/06/spellchecksetup/
 ;; (load "~/temp/dotfiles/emacsy/packages/my-doom-themes-ext-org.el")
 
 (require 'doom-themes)
-(use-package doom-modeline
-      :ensure t
-      :hook (after-init . doom-modeline-mode))
 (setq doom-themes-enable-bold t
       doom-themes-enable-italic t)
-;; (doom-themes-org-config)
+(doom-themes-org-config)
 
 (defun disable-all-themes ()
   "disable all active themes."
   (dolist (i custom-enabled-themes)
     (disable-theme i)))
-
 (defadvice load-theme (before disable-themes-first activate)
   (disable-all-themes))
+(load-theme 'doom-nord)
 #+END_SRC
 
 #+RESULTS:
-: load-theme
+
+#+BEGIN_SRC emacs-lisp
+(use-package doom-modeline
+      :ensure t
+      :hook (after-init . doom-modeline-mode))
+(doom-modeline 1)
+(setq doom-modeline-major-mode-icon t)
+#+END_SRC
+
+#+RESULTS:
 
 ** fixme basic bindings
 #+BEGIN_SRC elisp
@@ -892,6 +907,24 @@ example:
 
 #+RESULTS:
 : org-babel-execute:lisp
+
+*** inprog ocaml
+#+begin_src elisp
+(add-hook 'tuareg-mode-hook #'(lambda() (setq mode-name "🐫")))
+(let ((opam-share (ignore-errors (car (process-lines "opam" "config" "var" "share")))))
+  (when (and opam-share (file-directory-p opam-share))
+    ;; Register Merlin
+    (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
+    (autoload 'merlin-mode "merlin" nil t nil)
+    ;; Automatically start it in OCaml buffers
+    (add-hook 'tuareg-mode-hook 'merlin-mode t)
+    ;; Use opam switch to lookup ocamlmerlin binary
+    (setq merlin-command 'opam)))
+
+#+end_src
+
+#+RESULTS:
+: opam
 
 * installed package list and ref
 ** org-wiki

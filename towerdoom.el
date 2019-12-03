@@ -291,7 +291,6 @@
             (flyspell-buffer)))
 
 (set-default-font "Iosevka Nerd Font 12")
-
 (set-face-attribute 'default nil :family "Iosevka Nerd Font" :height 130)
 (set-face-attribute 'fixed-pitch nil :family "Iosevka Nerd Font")
 (set-face-attribute 'variable-pitch nil :family "EtBembo")
@@ -313,20 +312,23 @@
 ;; (load "~/temp/dotfiles/emacsy/packages/my-doom-themes-ext-org.el")
 
 (require 'doom-themes)
-(use-package doom-modeline
-      :ensure t
-      :hook (after-init . doom-modeline-mode))
 (setq doom-themes-enable-bold t
       doom-themes-enable-italic t)
-;; (doom-themes-org-config)
+(doom-themes-org-config)
 
 (defun disable-all-themes ()
   "disable all active themes."
   (dolist (i custom-enabled-themes)
     (disable-theme i)))
-
 (defadvice load-theme (before disable-themes-first activate)
   (disable-all-themes))
+(load-theme 'doom-nord)
+
+(use-package doom-modeline
+      :ensure t
+      :hook (after-init . doom-modeline-mode))
+(doom-modeline 1)
+(setq doom-modeline-major-mode-icon t)
 
 (setq reftex-default-bibliography '("~/academic/biblio/master-bib.bib"))
 

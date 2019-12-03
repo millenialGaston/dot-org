@@ -790,9 +790,45 @@ antigen bundle djui/alias-tips
 antigen bundle mafredri/zsh-async
 antigen bundle pipenv
 antigen bundle npm
+antigen bundle urbainvaes/fzf-marks
 #antigen bundle yourfin/pure-agnoster
 antigen bundle sindresorhus/pure
 antigen apply
+#+END_SRC
+
+** irssi
+:PROPERTIES:
+:header-args: :tangle ~/.irssi/config
+:END:
+#+BEGIN_SRC conf
+servers = (
+  {
+    address = "irc.freenode.net";
+    chatnet = "freenode";
+    port = "6667";
+    use_ssl = "yes";
+    ssl_verify = "yes";
+    autoconnect = "yes";
+  }
+);
+
+chatnets = {
+  Freenode = {
+    type = "IRC";
+    autosendcmd = "/msg nickserv identify ouestbillie /i!R\"[*2x;%
+  };
+};
+
+channels = (
+  { name = "#test-channel"; chatnet = "Freenode"; autojoin = "Yes"; }
+  { name = "#private-test-channel"; chatnet = "Freenode"; password = "password1"; autojoin = "Yes"; }
+);
+
+settings = {
+  core = { real_name = "cedric beaucage"; user_name = "gaston"; nick = "ouestbillie"; };
+  "fe-text" = { actlist_sort = "refnum"; term_force_colors = "yes"; scrollback_time = "7day "; };
+  "fe-common/core" = { theme = "default"; };
+};
 #+END_SRC
 
 ** compton                                                          :stable:
@@ -878,10 +914,7 @@ alias tma='tmux attach-session -t'
 alias m='pulsemixer'
 alias n='nvim'
 
-alias weather='curl -H \"Accept-Language: fr\" wttr.in/montreal'
-
-
-
+alias weather='curl -H  wttr.in/montreal'
 #+END_SRC
 
 ** ssh                                                               :notangle:
@@ -895,10 +928,35 @@ create a group sshuser, add AllowGroups sshuser to your /etc/ssh/sshd_config and
 restart your ssh service.
 #+end_quote
 
-** nvim
+*** TODO ssh agent
+#+begin_src bash
+SSH_ENV="$HOME/.ssh/environment"
 
+function start_agent {
+    echo "Initialising new SSH agent..."
+    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+    echo succeeded
+    chmod 600 "${SSH_ENV}"
+    . "${SSH_ENV}" > /dev/null
+    /usr/bin/ssh-add;
+}
+
+# Source SSH settings, if applicable
+
+if [ -f "${SSH_ENV}" ]; then
+    . "${SSH_ENV}" > /dev/null
+    #ps ${SSH_AGENT_PID} doesn't work under cywgin
+    ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+        start_agent;
+    }
+else
+#+end_src
+
+
+** nvim
+*** plug
 #+name:plug
-#+begin_src conf :tangle ~/.config/nvim/init.vim :comments link
+#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
   silent !curl -fLo ~/.nvim/autoload/plug.vim --create-dirs
         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -942,8 +1000,62 @@ Plug 'sjl/badwolf'
 call plug#end()
 #+end_src
 
+*** ocaml
+#+name:ocaml
+#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
+autocmd BufNewFile,BufRead *.eliom set syntax=ocaml
+let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+execute "set rtp+=" . g:opamshare . "/merlin/vim"
+let g:syntastic_ocaml_checkers = ['merlin']
+
+" other completion sources suggested to disable
+let g:deoplete#ignore_sources = {}
+let g:deoplete#ignore_sources.ocaml = ['buffer', 'around', 'member', 'tag']
+
+" no delay before completion
+let g:deoplete#auto_complete_delay = 0
+let s:opam_share_dir = system("opam config var share")
+let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
+
+let s:opam_configuration = {}
+
+function! OpamConfOcpIndent()
+  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
+endfunction
+let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
+
+function! OpamConfOcpIndex()
+  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
+endfunction
+let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
+
+function! OpamConfMerlin()
+  let l:dir = s:opam_share_dir . "/merlin/vim"
+  execute "set rtp+=" . l:dir
+endfunction
+let s:opam_configuration['merlin'] = function('OpamConfMerlin')
+
+let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
+let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
+let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
+for tool in s:opam_packages
+  " Respect package order (merlin should be after ocp-index)
+  if count(s:opam_available_tools, tool) > 0
+    call s:opam_configuration[tool]()
+  endif
+endfor
+" ## end of OPAM user-setup addition for vim / base ## keep this line
+" ## added by OPAM user-setup for vim / ocp-indent ## 725ae7375b8b5a30e5bab85fd0199620 ## you can edit, but keep this line
+if count(s:opam_available_tools,"ocp-indent") == 0
+  source "/home/gaston/.opam/4.07.1/share/ocp-indent/vim/indent/ocaml.vim"
+endif
+" ## end of OPAM user-setup addition for vim / ocp-indent ## keep this line
+
+#+end_src
+
+
 #+name:visual
-#+begin_src conf :tangle ~/.config/nvim/init.vim :comments link
+#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
 nnoremap gev :e $MYVIMRC<CR>
 nnoremap gsv :so $MYVIMRC<CR>
 set clipboard=unnamedplus
@@ -994,7 +1106,7 @@ set wrap
 #+end_src
 
 #+name:shortcuts
-#+begin_src conf :tangle ~/.config/nvim/init.vim :comments link
+#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
 autocmd Rc BufEnter * EnableStripWhitespaceOnSave
 nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
@@ -1032,7 +1144,7 @@ inoremap <c-x><c-s> <Esc>:w<CR>
 #+end_src
 
 #+name:fzf
-#+begin_src conf :tangle ~/.config/nvim/init.vim :comments link
+#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
 imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
@@ -1076,7 +1188,7 @@ let g:fzf_colors =  {
 #+end_src
 
 #+name:which-key
-#+begin_src conf :tangle ~/.config/nvim/init.vim :comments link
+#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
 autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map')
 let g:mapleader = "\<Space>"
 let g:maplocalleader = ','
@@ -1130,20 +1242,16 @@ let g:which_key_map['w'] = {
 #+end_src
 
 #+name:plugin-settings
-#+begin_src conf :tangle ~/.config/nvim/init.vim :comments link
+#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#auto_complete_start_length = 1
-
-
 let g:current_line_whitespace_disabled_soft=1
 let g:defaultWinSwoopHeight = 15
 
-"" auto-pairs
 let g:AutoPairsMapCh = 0
 let g:AutoPairsMapCR = 0
 let g:AutoPairsShortcutBackInsert='<M-i>'
 
-"" autoformat
 autocmd Rc BufEnter,BufWinEnter,BufRead,BufNewFile *
       \ if &filetype == "" | set filetype=text | endif
 autocmd Rc BufWrite * :Autoformat
@@ -1155,7 +1263,10 @@ highlight NonText     ctermbg=none
 highlight EndOfBuffer ctermbg=none
 highlight VertSplit   cterm=none ctermfg=240 ctermbg=240
 
+#+end_src
 
+#+name:commands
+#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
 command! -bang -nargs=? -complete=dir Files
       \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
@@ -1168,11 +1279,11 @@ command! -bang -nargs=* Rg
 
 command! -bang Colors
       \ call fzf#vim#colors({'left': '15%', 'options': '--reverse --margin 30%,0'}, <bang>0)
+#+end_src
 
-
-"functions
+#+name:functions
+#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
 function! s:fzf_statusline()
-  " Override statusline as you like
   highlight fzf1 ctermfg=161 ctermbg=251
   highlight fzf2 ctermfg=23 ctermbg=251
   highlight fzf3 ctermfg=237 ctermbg=251
@@ -1190,14 +1301,12 @@ function! DeleteFileSwaps()
   let l:current_swap_file = substitute(l:output, '\n', '', '')
   let l:base = substitute(l:current_swap_file, '\v\.\w+$', '', '')
   let l:swap_files = split(glob(l:base.'\.s*'))
-  " delete all except the current swap file
   for l:swap_file in l:swap_files
     if !empty(glob(l:swap_file)) && l:swap_file != l:current_swap_file
       call delete(l:swap_file)
       echo "swap file removed: ".l:swap_file
     endif
   endfor
-  " Reset swap file extension to `.swp`.
   set swf! | set swf!
   echo "Reset swap file extension for file: ".expand('%')
 endfunction
@@ -1260,6 +1369,7 @@ ${goto 160}wlo1 up${alignr 106}${upspeed wlo1}
 
 * packages
 ** livecli                                                             :aur:
+* TODO gpg
 
 * fonts
 - https://wiki.archlinux.org/index.php/Fonts
