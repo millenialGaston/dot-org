@@ -1,6 +1,7 @@
 #+title: arch/os stuff
 #+author: frederic.boilea
 #+html_head: <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
+justsayinggurl
 * myconf
 :PROPERTIES:
 :header-args: :tangle :mkdirp yes
@@ -796,6 +797,7 @@ antigen bundle sindresorhus/pure
 antigen apply
 #+END_SRC
 
+** TODO pass
 ** irssi
 :PROPERTIES:
 :header-args: :tangle ~/.irssi/config :comments link
@@ -930,7 +932,7 @@ alias tma='tmux attach-session -t'
 alias m='pulsemixer'
 alias n='nvim'
 
-alias weather='curl -H  wttr.in/montreal'
+alias weather='curl wttr.in/Montreal'
 #+END_SRC
 
 ** ssh                                                               :notangle:
@@ -969,7 +971,6 @@ else
 #+end_src
 
 ** nvim
-
 *** plug
 #+name:plug
 #+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
@@ -986,7 +987,10 @@ Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 Plug 'pelodelfuego/vim-swoop'
 Plug 'tpope/vim-speeddating'
 Plug 'jceb/vim-orgmode'
-
+Plug 'ocaml/vim-ocaml'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'sbdchd/neoformat'
 
 Plug 'zhou13/vim-easyescape'
 Plug 'tpope/vim-fugitive'
@@ -994,7 +998,6 @@ Plug 'tpope/vim-commentary'
 Plug 'easymotion/vim-easymotion'
 Plug 'farmergreg/vim-lastplace'
 Plug 'airblade/vim-gitgutter'
-Plug 'Chiel92/vim-autoformat'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'jiangmiao/auto-pairs'
 Plug 'maxbrunsfeld/vim-yankstack'
@@ -1019,6 +1022,16 @@ call plug#end()
 *** ocaml
 #+name:ocaml
 #+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
+
+let g:neoformat_ocaml_ocamlformat = {
+            \ 'exe': 'ocamlformat',
+            \ 'no_append': 1,
+            \ 'stdin': 1,
+            \ 'args': ['--disable-outside-detected-project', '--name', '"%:p"', '-']
+            \ }
+
+let g:neoformat_enabled_ocaml = ['ocamlformat']
+
 autocmd BufNewFile,BufRead *.eliom set syntax=ocaml
 let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
 execute "set rtp+=" . g:opamshare . "/merlin/vim"
@@ -1066,7 +1079,6 @@ if count(s:opam_available_tools,"ocp-indent") == 0
   source "/home/gaston/.opam/4.07.1/share/ocp-indent/vim/indent/ocaml.vim"
 endif
 " ## end of OPAM user-setup addition for vim / ocp-indent ## keep this line
-
 #+end_src
 
 *** visual
