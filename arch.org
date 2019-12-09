@@ -847,6 +847,8 @@ settings = {
 };
 #+END_SRC
 *** TODO statusbar
+** irssi themed
+https://github.com/ronilaukkarinen/weed
 
 ** compton                                                          :stable:
 :PROPERTIES:
@@ -1284,7 +1286,6 @@ let g:AutoPairsShortcutBackInsert='<M-i>'
 
 autocmd Rc BufEnter,BufWinEnter,BufRead,BufNewFile *
       \ if &filetype == "" | set filetype=text | endif
-autocmd Rc BufWrite * :Autoformat
 
 let g:lightline = { 'colorscheme': 'iceberg' }
 colorscheme iceberg

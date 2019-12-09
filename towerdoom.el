@@ -209,11 +209,6 @@
   (global-company-mode t))
 (define-key global-map (kbd "C-.") 'company-files)
 
-(use-package company-box
-  :after company
-  :diminish
-  :hook (company-mode . company-box-mode))
-
 (setq slime-contribs '(slime-fancy slime-asdf))
 (setq inferior-lisp-program "sbcl --dynamic-space-size 10000")
 (setq inferior-julia-program-name "/usr/bin/julia")

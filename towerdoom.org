@@ -6,6 +6,11 @@
 #+ATTR_ORG: :width 200/250/300/400/500/600
 #+TODO: always(a) fixme(r) next(n) todo(t) inprog(p) stable(d) idea(i) project(j) wait(w) | broken(b)
 
+* temp hack
+#+BEGIN_SRC emacs-lisp
+(load "/home/gaston/macs/packages/org-wiki.el")
+#+END_SRC
+
 * idea irc
 :PROPERTIES:
 :header-args: :tangle no
@@ -705,7 +710,10 @@ https://gist.github.com/rswgnu/85ca5c69bb26551f3f27500855893dbe
                (memq 'company-tng-frontend company-frontends))
     (company-preview-frontend command)))
 #+END_SRC
-*** company-box                                                   :tocheck:
+*** company-box :notangle:tocheck:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 #+BEGIN_SRC elisp
 (use-package company-box
   :after company
@@ -928,6 +936,7 @@ example:
 
 * installed package list and ref
 ** org-wiki
+** ox-hugo
 ** org-wild-notifier
 :PROPERTIES:
 :url:      https://github.com/akhramov/org-wild-notifier.el
