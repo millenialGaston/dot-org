@@ -1,6 +1,7 @@
 #+title: arch/os stuff
 #+author: frederic.boilea
 #+html_head: <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
+quel bon met
 * myconf
 :PROPERTIES:
 :header-args: :tangle :mkdirp yes
