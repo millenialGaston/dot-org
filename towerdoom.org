@@ -21,7 +21,6 @@
 #+RESULTS:
 | chat.freenode.net | :tls | t | :nick | ouestbillie | :sasl-username | ouestbillie | :sasl-password | /i!R"[*2x;%s | :port | 6667 | :channels | (#emacs-circe) |
 
-
 * todo future
 ** always packages
 *** memacs
@@ -101,58 +100,11 @@ https://cestlaz.github.io/stories/emacs/
 
 ** test
 
-* stable basic
+* stable ui
+** general
 :PROPERTIES:
 :header-args: :tangle yes
 :END:
-:LOGBOOK:
-CLOCK: [2019-09-18 Wed 01:55]--[2019-09-18 Wed 01:55] =>  0:00
-- test
-:END:
-** stable COMMENT basic basic
-:PROPERTIES:
-:header-args: :tangle yes
-:END:
-#+BEGIN_SRC elisp
-(require 'org-alert)
-(setq alert-default-style 'libnotify)
-(setq evil-want-C-u-scroll nil
-      evil-want-C-d-scroll nil)
-(setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "firefox")
-;; Files association
-(setq org-file-apps
-      '((auto-mode . emacs)
-        ("\\.djvu\\" . "evince \"%s\"")
-        ("\\.pdf\\" . "evince \"%s\"")
-        ("\\.docx\\" . "libreoffice \"%s")))
-#+END_SRC
-
-#+RESULTS:
-: ((auto-mode . emacs) (\.djvu\ . evince "%s") (\.pdf\ . evince "%s") (\.docx\ . libreoffice "%s))
-** inprog spelling
-http://manuel-uberti.github.io/emacs/2016/06/06/spellchecksetup/
-#+BEGIN_SRC emacs-lisp
-(setq ispell-program-name (executable-find "hunspell")
-      ispell-dictionary "en_US")
-(bind-key "C-c I"
-          (lambda ()
-            (interactive)
-            (ispell-change-dictionary "fr_CA")
-            (flyspell-buffer)))
-
-(bind-key "C-c E"
-          (lambda ()
-            (interactive)
-            (ispell-change-dictionary "en_GB")
-            (flyspell-buffer)))
-
-#+END_SRC
-
-#+RESULTS:
-| lambda | nil | (interactive) | (ispell-change-dictionary en_GB) | (flyspell-buffer) |
-
-** stable ui
 #+BEGIN_SRC emacs-lisp
 (set-default-font "Iosevka Nerd Font 12")
 (set-face-attribute 'default nil :family "Iosevka Nerd Font" :height 130)
@@ -189,8 +141,7 @@ http://manuel-uberti.github.io/emacs/2016/06/06/spellchecksetup/
 (load-theme 'doom-nord)
 #+END_SRC
 
-#+RESULTS:
-
+** modeline
 #+BEGIN_SRC emacs-lisp
 (use-package doom-modeline
       :ensure t
@@ -198,8 +149,149 @@ http://manuel-uberti.github.io/emacs/2016/06/06/spellchecksetup/
 (doom-modeline 1)
 (setq doom-modeline-major-mode-icon t)
 #+END_SRC
+** org ui
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+#+BEGIN_SRC emacs-lisp
+(setq org-hide-emphasis-markers t)
+(font-lock-add-keywords 'org-mode
+                        '(("^ *\\([-]\\) "
+                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+(use-package org-bullets
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+(let* ((variable-tuple
+        (cond
+         ((x-family-fonts "Iosevka") '(:family "Nerd Font Complete"))
+         ((x-family-fonts "Hack")    '(:family "Nerd Font Complete"))
+         (nil (warn "Cannot find font"))))
+       (base-font-color     (face-foreground 'default nil 'default))
+       (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+  (custom-theme-set-faces
+   'user
+   `(org-level-8 ((t (,@headline ,@variable-tuple))))
+   `(org-level-7 ((t (,@headline ,@variable-tuple))))
+   `(org-level-6 ((t (,@headline ,@variable-tuple))))
+   `(org-level-5 ((t (,@headline ,@variable-tuple))))
+   `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+   `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+   `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+   `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
+   `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
+
+(custom-theme-set-faces
+ 'user
+ '(variable-pitch ((t (:family "Nerd Font Complete" :height 180 :weight light))))
+ '(fixed-pitch ((t ( :family "Inconsolata" :slant normal :weight normal :height 1.0 :width normal)))))
+(add-hook 'org-mode-hook 'variable-pitch-mode)
+#+END_SRC
 
 #+RESULTS:
+| variable-pitch-mode | (lambda nil (org-bullets-mode 1)) | er/add-org-mode-expansions | org-clock-load | org-tempo-setup | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | doom-disable-show-paren-mode-h | doom-disable-show-trailing-whitespace-h | +org-enable-auto-reformat-tables-h | +org-enable-auto-update-cookies-h | +org-unfold-to-2nd-level-or-point-h | evil-org-mode | org-fancy-priorities-mode | org-bullets-mode | toc-org-enable | +evil-embrace-latex-mode-hook-h | embrace-org-mode-hook | org-eldoc-load |
+
+* stable basic
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+:LOGBOOK:
+CLOCK: [2019-09-18 Wed 01:55]--[2019-09-18 Wed 01:55] =>  0:00
+- test
+:END:
+** stable COMMENT basic basic
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+#+BEGIN_SRC elisp
+(require 'org-alert)
+(setq alert-default-style 'libnotify)
+(setq evil-want-C-u-scroll nil
+      evil-want-C-d-scroll nil)
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "firefox")
+;; Files association
+(setq org-file-apps
+      '((auto-mode . emacs)
+        ("\\.djvu\\" . "evince \"%s\"")
+        ("\\.pdf\\" . "evince \"%s\"")
+        ("\\.docx\\" . "libreoffice \"%s")))
+#+END_SRC
+** inprog spelling
+http://manuel-uberti.github.io/emacs/2016/06/06/spellchecksetup/
+#+BEGIN_SRC emacs-lisp
+(setq ispell-program-name (executable-find "hunspell")
+      ispell-dictionary "en_US")
+(bind-key "C-c I"
+          (lambda ()
+            (interactive)
+            (ispell-change-dictionary "fr_CA")
+            (flyspell-buffer)))
+
+(bind-key "C-c E"
+          (lambda ()
+            (interactive)
+            (ispell-change-dictionary "en_GB")
+            (flyspell-buffer)))
+
+#+END_SRC
+
+#+RESULTS:
+| lambda | nil | (interactive) | (ispell-change-dictionary en_GB) | (flyspell-buffer) |
+
+** stable bib stuff
+*** new default files
+#+BEGIN_SRC emacs-lisp
+(setq reftex-default-bibliography '("~/academic/biblio/master-bib.bib"))
+
+(setq org-ref-bibliography-notes "~/academic/biblio/orgRefNotes.org"
+      org-ref-default-bibliography '("~/academic/biblio/master-bib.bib")
+      org-ref-pdf-directory "~/academic/biblio/papers/")
+
+(setq bibtex-completion-bibliography '("~/academic/biblio/master-bib.bib")
+      bibtex-completion-library-path "~/academic/biblio/papers/"
+      bibtex-completion-notes-path "~/academic/biblio/helm-bibtex-notes")
+
+(setq bibtex-completion-pdf-field "file")
+(setq bibtex-completion-pdf-open-function
+      (lambda (fpath)
+        (start-process "evince" "*helm-bibtex-evince*" "/usr/bin/evince"
+                       fpath)))
+
+(setq bibtex-dialect 'biblatex)
+#+END_SRC
+
+#+RESULTS:
+: biblatex
+
+*** stable completion format
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+#+BEGIN_SRC elisp
+(setq bibtex-completion-format-citation-functions
+      '((org-mode . bibtex-completion-format-citation-ebib)
+        (latex-mode    . bibtex-completion-format-citation-cite)
+        (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
+        (default       . bibtex-completion-format-citation-default)))
+#+END_SRC
+
+#+RESULTS:
+: ((org-mode . bibtex-completion-format-citation-ebib) (latex-mode . bibtex-completion-format-citation-cite) (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc) (default . bibtex-completion-format-citation-default))
+
+*** idea completion display format
+#+begin_src elisp
+(setq bibtex-completion-display-formats
+      '((article       . "${author:36} ${title:*} ${journal:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
+        (inbook        . "${author:36} ${title:*} Chapter ${chapter:32} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
+        (incollection  . "${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
+        (inproceedings . "${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
+        (t             . "${author:36} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")))
+#+end_src
+
+#+RESULTS:
+: ((article . ${author:36} ${title:*} ${journal:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}) (inbook . ${author:36} ${title:*} Chapter ${chapter:32} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}) (incollection . ${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}) (inproceedings . ${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}) (t . ${author:36} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}))
 
 ** fixme basic bindings
 #+BEGIN_SRC elisp
@@ -267,7 +359,7 @@ http://manuel-uberti.github.io/emacs/2016/06/06/spellchecksetup/
 #+RESULTS:
 : counsel-rg
 
-** stable tempom
+** stable tempo
 som text
 #+BEGIN_SRC elisp
 (require 'org-tempo)
@@ -285,84 +377,6 @@ som text
                        "<o")
 #+END_SRC
 some text
-** stable bib stuff
-*** new default files
-#+BEGIN_SRC emacs-lisp
-(setq reftex-default-bibliography '("~/academic/biblio/master-bib.bib"))
-
-(setq org-ref-bibliography-notes "~/academic/biblio/orgRefNotes.org"
-      org-ref-default-bibliography '("~/academic/biblio/master-bib.bib")
-      org-ref-pdf-directory "~/academic/biblio/papers/")
-
-(setq bibtex-completion-bibliography '("~/academic/biblio/master-bib.bib")
-      bibtex-completion-library-path "~/academic/biblio/papers/"
-      bibtex-completion-notes-path "~/academic/biblio/helm-bibtex-notes")
-
-(setq bibtex-completion-pdf-field "file")
-(setq bibtex-completion-pdf-open-function
-      (lambda (fpath)
-        (start-process "evince" "*helm-bibtex-evince*" "/usr/bin/evince"
-                       fpath)))
-
-(setq bibtex-dialect 'biblatex)
-#+END_SRC
-
-#+RESULTS:
-: biblatex
-
-*** broken default files                                         :notangle:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
-
-#+BEGIN_SRC elisp
-(setq reftex-default-bibliography '("~/.personal/.bibstuff/master-biblio.bib"))
-
-(setq org-ref-bibliography-notes "~/.personal/.bibstuff/orgRefNotes.org"
-      org-ref-default-bibliography '("~/.personal/.bibstuff/master-bib.bib")
-      org-ref-pdf-directory "~/.personal/.bibstuff/bib-pdfs/")
-
-(setq bibtex-completion-bibliography '("~/.personal/.bibstuff/master-bib.bib")
-      bibtex-completion-library-path "~/.personal/.bibstuff/bib-pdfs/"
-      bibtex-completion-notes-path "~/.personal/.bibstuff/helm-bibtex-notes")
-
-(setq bibtex-completion-pdf-field "file")
-(setq bibtex-completion-pdf-open-function
-      (lambda (fpath)
-        (start-process "evince" "*helm-bibtex-evince*" "/usr/bin/evince"
-                       fpath)))
-
-(setq bibtex-dialect 'biblatex)
-#+END_SRC
-*** stable completion format
-:PROPERTIES:
-:header-args: :tangle yes
-:END:
-
-#+BEGIN_SRC elisp
-(setq bibtex-completion-format-citation-functions
-      '((org-mode . bibtex-completion-format-citation-ebib)
-        (latex-mode    . bibtex-completion-format-citation-cite)
-        (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
-        (default       . bibtex-completion-format-citation-default)))
-#+END_SRC
-
-#+RESULTS:
-: ((org-mode . bibtex-completion-format-citation-ebib) (latex-mode . bibtex-completion-format-citation-cite) (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc) (default . bibtex-completion-format-citation-default))
-
-*** idea completion display format
-#+begin_src elisp
-(setq bibtex-completion-display-formats
-      '((article       . "${author:36} ${title:*} ${journal:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
-        (inbook        . "${author:36} ${title:*} Chapter ${chapter:32} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
-        (incollection  . "${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
-        (inproceedings . "${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
-        (t             . "${author:36} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")))
-#+end_src
-
-#+RESULTS:
-: ((article . ${author:36} ${title:*} ${journal:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}) (inbook . ${author:36} ${title:*} Chapter ${chapter:32} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}) (incollection . ${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}) (inproceedings . ${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}) (t . ${author:36} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}))
-
 ** stable evil
 :PROPERTIES:
 :header-args: :tangle yes
@@ -933,6 +947,13 @@ example:
 
 #+RESULTS:
 : opam
+* inprog email
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
+#+END_SRC
+
+#+RESULTS:
+| /usr/local/share/emacs/site-lisp/mu/mu4e | /home/gaston/.emacs.d/.local/elpa/mu4e-overview-20191020.842 | /home/gaston/.doom.d/snippets/ | /home/gaston/.opam/4.07.1/share/emacs/site-lisp | /home/gaston/.emacs.d/.local/straight/build/ace-link | /home/gaston/.emacs.d/.local/straight/build/visual-fill-column | /home/gaston/.emacs.d/.local/straight/build/wordnut | /home/gaston/.emacs.d/.local/straight/build/langtool | /home/gaston/.emacs.d/.local/straight/build/mixed-pitch | /home/gaston/.emacs.d/.local/straight/build/synosaurus | /home/gaston/.emacs.d/.local/straight/build/twittering-mode | /home/gaston/.emacs.d/.local/straight/build/elfeed-org | /home/gaston/.emacs.d/.local/straight/build/elfeed | /home/gaston/.emacs.d/.local/straight/build/deferred | /home/gaston/.emacs.d/.local/straight/build/request-deferred | /home/gaston/.emacs.d/.local/straight/build/request | /home/gaston/.emacs.d/.local/straight/build/org-gcal | /home/gaston/.emacs.d/.local/straight/build/calfw-org | /home/gaston/.emacs.d/.local/straight/build/calfw | /home/gaston/.emacs.d/.local/straight/build/helm-notmuch | /home/gaston/.emacs.d/.local/straight/build/counsel-notmuch | /home/gaston/.emacs.d/.local/straight/build/org-mime | /home/gaston/.emacs.d/.local/straight/build/notmuch | /home/gaston/.emacs.d/.local/straight/build/flycheck-swift | /home/gaston/.emacs.d/.local/straight/build/swift-mode | /home/gaston/.emacs.d/.local/straight/build/geiser | /home/gaston/.emacs.d/.local/straight/build/qt-pro-mode | /home/gaston/.emacs.d/.local/straight/build/qml-mode | /home/gaston/.emacs.d/.local/straight/build/pyimpsort | /home/gaston/.emacs.d/.local/straight/build/shut-up | /home/gaston/.emacs.d/.local/straight/build/pyimport | /home/gaston/.emacs.d/.local/straight/build/python-pytest | /home/gaston/.emacs.d/.local/straight/build/nose | /home/gaston/.emacs.d/.local/straight/build/pipenv | /home/gaston/.emacs.d/.local/straight/build/pythonic | /home/gaston/.emacs.d/.local/straight/build/anaconda-mode | /home/gaston/.emacs.d/.local/straight/build/pip-requirements | /home/gaston/.emacs.d/.local/straight/build/flycheck-plantuml | /home/gaston/.emacs.d/.local/straight/build/plantuml-mode | /home/gaston/.emacs.d/.local/straight/build/ox-pandoc | /home/gaston/.emacs.d/.local/straight/build/ob-racket | /home/gaston/.emacs.d/.local/straight/build/ob-go | /home/gaston/.emacs.d/.local/straight/build/ob-async | /home/gaston/.emacs.d/.local/straight/build/org-re-reveal | /home/gaston/.emacs.d/.local/straight/build/org-tree-slide | /home/gaston/.emacs.d/.local/straight/build/centered-window | /home/gaston/.emacs.d/.local/straight/build/org-pomodoro | /home/gaston/.emacs.d/.local/straight/build/ob-ipython | /home/gaston/.emacs.d/.local/straight/build/orgit | /home/gaston/.emacs.d/.local/straight/build/org-pdfview | /home/gaston/.emacs.d/.local/straight/build/ox-clip | /home/gaston/.emacs.d/.local/straight/build/org-yt | /home/gaston/.emacs.d/.local/straight/build/org-fancy-priorities | /home/gaston/.emacs.d/.local/straight/build/org-plus-contrib | /home/gaston/.emacs.d/.local/straight/build/dune | /home/gaston/.emacs.d/.local/straight/build/ocamlformat | /home/gaston/.emacs.d/.local/straight/build/utop | /home/gaston/.emacs.d/.local/straight/build/ocp-indent | /home/gaston/.emacs.d/.local/straight/build/flycheck-ocaml | /home/gaston/.emacs.d/.local/straight/build/merlin-eldoc | /home/gaston/.emacs.d/.local/straight/build/merlin | /home/gaston/.emacs.d/.local/straight/build/caml | /home/gaston/.emacs.d/.local/straight/build/tuareg | /home/gaston/.emacs.d/.local/straight/build/evil-markdown | /home/gaston/.emacs.d/.local/straight/build/edit-indirect | /home/gaston/.emacs.d/.local/straight/build/markdown-toc | /home/gaston/.emacs.d/.local/straight/build/ivy-bibtex | /home/gaston/.emacs.d/.local/straight/build/latex-preview-pane | /home/gaston/.emacs.d/.local/straight/build/adaptive-wrap | /home/gaston/.emacs.d/.local/straight/build/auctex/ | /home/gaston/.emacs.d/.local/straight/build/auctex | /home/gaston/.emacs.d/.local/straight/build/xref-js2 | /home/gaston/.emacs.d/.local/straight/build/tide | /home/gaston/.emacs.d/.local/straight/build/simple-httpd | /home/gaston/.emacs.d/.local/straight/build/skewer-mode | /home/gaston/.emacs.d/.local/straight/build/nodejs-repl | /home/gaston/.emacs.d/.local/straight/build/npm-mode | /home/gaston/.emacs.d/.local/straight/build/multiple-cursors | /home/gaston/.emacs.d/.local/straight/build/js2-refactor | /home/gaston/.emacs.d/.local/straight/build/eslintd-fix | /home/gaston/.emacs.d/.local/straight/build/typescript-mode | /home/gaston/.emacs.d/.local/straight/build/rjsx-mode | /home/gaston/.emacs.d/.local/straight/build/js2-mode | /home/gaston/.emacs.d/.local/straight/build/coffee-mode | /home/gaston/.emacs.d/.local/straight/build/meghanada | /home/gaston/.emacs.d/.local/straight/build/groovy-mode | /home/gaston/.emacs.d/.local/straight/build/android-mode | /home/gaston/.emacs.d/.local/straight/build/prop-menu | /home/gaston/.emacs.d/.local/straight/build/idris-mode | /home/gaston/.emacs.d/.local/straight/build/hy-mode | /home/gaston/.emacs.d/.local/straight/build/intero | /home/gaston/.emacs.d/.local/straight/build/flycheck-golangci-lint | /home/gaston/.emacs.d/.local/straight/build/go-gen-test | /home/gaston/.emacs.d/.local/straight/build/go-tag | /home/gaston/.emacs.d/.local/straight/build/gorepl-mode | /home/gaston/.emacs.d/.local/straight/build/go-guru | /home/gaston/.emacs.d/.local/straight/build/go-mode | /home/gaston/.emacs.d/.local/straight/build/go-eldoc | /home/gaston/.emacs.d/.local/straight/build/pos-tip | /home/gaston/.emacs.d/.local/straight/build/company-quickhelp | /home/gaston/.emacs.d/.local/straight/build/fsharp-mode | /home/gaston/.emacs.d/.local/straight/build/ctable | /home/gaston/.emacs.d/.local/straight/build/ess-R-data-view | /home/gaston/.emacs.d/.local/straight/build/buttercup | /home/gaston/.emacs.d/.local/straight/build/flycheck-cask | /home/gaston/.emacs.d/.local/straight/build/elisp-demos | /home/gaston/.emacs.d/.local/straight/build/elisp-def | /home/gaston/.emacs.d/.local/straight/build/overseer | /home/gaston/.emacs.d/.local/straight/build/highlight-quoted | /home/gaston/.emacs.d/.local/straight/build/flycheck-elm | /home/gaston/.emacs.d/.local/straight/build/elm-mode | /home/gaston/.emacs.d/.local/straight/build/protobuf-mode | /home/gaston/.emacs.d/.local/straight/build/reformatter | /home/gaston/.emacs.d/.local/straight/build/dhall-mode | /home/gaston/.emacs.d/.local/straight/build/csv-mode | /home/gaston/.emacs.d/.local/straight/build/yaml-mode | /home/gaston/.emacs.d/.local/straight/build/jsonnet-mode | /home/gaston/.emacs.d/.local/straight/build/json-snatcher | /home/gaston/.emacs.d/.local/straight/build/json-reformat | /home/gaston/.emacs.d/.local/straight/build/json-mode | /home/gaston/.emacs.d/.local/straight/build/graphql-mode | /home/gaston/.emacs.d/.local/straight/build/math-symbol-lists | /home/gaston/.emacs.d/.local/straight/build/company-math | /home/gaston/.emacs.d/.local/straight/build/company-coq | /home/gaston/.emacs.d/.local/straight/build/proof-general/lib/ | /home/gaston/.emacs.d/.local/straight/build/proof-general/generic/ | /home/gaston/.emacs.d/.local/straight/build/proof-general | /home/gaston/.emacs.d/.local/straight/build/sly-repl-ansi-color | /home/gaston/.emacs.d/.local/straight/build/macrostep | /home/gaston/.emacs.d/.local/straight/build/sly-macrostep | /home/gaston/.emacs.d/.local/straight/build/helm-rtags | /home/gaston/.emacs.d/.local/straight/build/ivy-rtags | /home/gaston/.emacs.d/.local/straight/build/rtags | /home/gaston/.emacs.d/.local/straight/build/flycheck-irony | /home/gaston/.emacs.d/.local/straight/build/glsl-mode | /home/gaston/.emacs.d/.local/straight/build/opencl-mode | /home/gaston/.emacs.d/.local/straight/build/modern-cpp-font-lock | /home/gaston/.emacs.d/.local/straight/build/disaster | /home/gaston/.emacs.d/.local/straight/build/demangle-mode | /home/gaston/.emacs.d/.local/straight/build/cuda-mode | /home/gaston/.emacs.d/.local/straight/build/cmake-mode | /home/gaston/.emacs.d/.local/straight/build/nasm-mode | /home/gaston/.emacs.d/.local/straight/build/haxor-mode | /home/gaston/.emacs.d/.local/straight/build/mips-mode | /home/gaston/.emacs.d/.local/straight/build/agda2-mode | /home/gaston/.emacs.d/.local/straight/build/agda-input | /home/gaston/.emacs.d/.local/straight/build/kurecolor | /home/gaston/.emacs.d/.local/straight/build/rainbow-mode | /home/gaston/.emacs.d/.local/straight/build/makefile-executor | /home/gaston/.emacs.d/.local/straight/build/evil-magit | /home/gaston/.emacs.d/.local/straight/build/hl-todo | /home/gaston/.emacs.d/.local/straight/build/magit-todos | /home/gaston/.emacs.d/.local/straight/build/magit-popup | /home/gaston/.emacs.d/.local/straight/build/magit-gitflow | /home/gaston/.emacs.d/.local/straight/build/treepy | /home/gaston/.emacs.d/.local/straight/build/ghub | /home/gaston/.emacs.d/.local/straight/build/emacsql | /home/gaston/.emacs.d/.local/straight/build/emacsql-sqlite | /home/gaston/.emacs.d/.local/straight/build/closql | /home/gaston/.emacs.d/.local/straight/build/forge | /home/gaston/.emacs.d/.local/straight/build/with-editor | /home/gaston/.emacs.d/.local/straight/build/git-commit | /home/gaston/.emacs.d/.local/straight/build/magit | /home/gaston/.emacs.d/.local/straight/build/counsel-dash | /home/gaston/.emacs.d/.local/straight/build/helm-dash | /home/gaston/.emacs.d/.local/straight/build/dash-docs | /home/gaston/.emacs.d/.local/straight/build/helm-xref | /home/gaston/.emacs.d/.local/straight/build/ivy-xref | /home/gaston/.emacs.d/.local/straight/build/dumb-jump | /home/gaston/.emacs.d/.local/straight/build/marshal | /home/gaston/.emacs.d/.local/straight/build/logito | /home/gaston/.emacs.d/.local/straight/build/pcache | /home/gaston/.emacs.d/.local/straight/build/gh | /home/gaston/.emacs.d/.local/straight/build/gist | /home/gaston/.emacs.d/.local/straight/build/vterm | /home/gaston/.emacs.d/.local/straight/build/multi-term | /home/gaston/.emacs.d/.local/straight/build/esh-help | /home/gaston/.emacs.d/.local/straight/build/eshell-z | /home/gaston/.emacs.d/.local/straight/build/eshell-up | /home/gaston/.emacs.d/.local/straight/build/fd-dired | /home/gaston/.emacs.d/.local/straight/build/dired-rsync | /home/gaston/.emacs.d/.local/straight/build/diff-hl | /home/gaston/.emacs.d/.local/straight/build/dired-git-info | /home/gaston/.emacs.d/.local/straight/build/diredfl | /home/gaston/.emacs.d/.local/straight/build/rotate-text | /home/gaston/.emacs.d/.local/straight/build/evil-mc | /home/gaston/.emacs.d/.local/straight/build/iedit | /home/gaston/.emacs.d/.local/straight/build/evil-multiedit | /home/gaston/.emacs.d/.local/straight/build/format-all | /home/gaston/.emacs.d/.local/straight/build/vimish-fold | /home/gaston/.emacs.d/.local/straight/build/evil-vimish-fold | /home/gaston/.emacs.d/.local/straight/build/ivy-rich | /home/gaston/.emacs.d/.local/straight/build/ivy-hydra | /home/gaston/.emacs.d/.local/straight/build/counsel-projectile | /home/gaston/.emacs.d/.local/straight/build/counsel | /home/gaston/.emacs.d/.local/straight/build/amx | /home/gaston/.emacs.d/.local/straight/build/helm-org | /home/gaston/.emacs.d/.local/straight/build/swiper | /home/gaston/.emacs.d/.local/straight/build/swiper-helm | /home/gaston/.emacs.d/.local/straight/build/helm-projectile | /home/gaston/.emacs.d/.local/straight/build/helm-describe-modes | /home/gaston/.emacs.d/.local/straight/build/helm-company | /home/gaston/.emacs.d/.local/straight/build/persp-mode | /home/gaston/.emacs.d/.local/straight/build/gitignore-mode | /home/gaston/.emacs.d/.local/straight/build/gitconfig-mode | /home/gaston/.emacs.d/.local/straight/build/git-timemachine | /home/gaston/.emacs.d/.local/straight/build/git-link | /home/gaston/.emacs.d/.local/straight/build/fringe-helper | /home/gaston/.emacs.d/.local/straight/build/git-gutter | /home/gaston/.emacs.d/.local/straight/build/git-gutter-fringe | /home/gaston/.emacs.d/.local/straight/build/flycheck-popup-tip | /home/gaston/.emacs.d/.local/straight/build/flycheck | /home/gaston/.emacs.d/.local/straight/build/flyspell-correct-ivy | /home/gaston/.emacs.d/.local/straight/build/flyspell-correct | /home/gaston/.emacs.d/.local/straight/build/doom-snippets | /home/gaston/.emacs.d/.local/straight/build/auto-yasnippet | /home/gaston/.emacs.d/.local/straight/build/evil-quick-diff | /home/gaston/.emacs.d/.local/straight/build/exato | /home/gaston/.emacs.d/.local/straight/build/evil-visualstar | /home/gaston/.emacs.d/.local/straight/build/evil-traces | /home/gaston/.emacs.d/.local/straight/build/evil-textobj-anyblock | /home/gaston/.emacs.d/.local/straight/build/evil-snipe | /home/gaston/.emacs.d/.local/straight/build/evil-numbers | /home/gaston/.emacs.d/.local/straight/build/evil-nerd-commenter | /home/gaston/.emacs.d/.local/straight/build/evil-indent-plus | /home/gaston/.emacs.d/.local/straight/build/evil-exchange | /home/gaston/.emacs.d/.local/straight/build/evil-escape | /home/gaston/.emacs.d/.local/straight/build/evil-surround | /home/gaston/.emacs.d/.local/straight/build/expand-region | /home/gaston/.emacs.d/.local/straight/build/embrace | /home/gaston/.emacs.d/.local/straight/build/evil-embrace | /home/gaston/.emacs.d/.local/straight/build/evil-easymotion | /home/gaston/.emacs.d/.local/straight/build/evil-args | /home/gaston/.emacs.d/.local/straight/build/quickrun | /home/gaston/.emacs.d/.local/straight/build/helm-c-yasnippet | /home/gaston/.emacs.d/.local/straight/build/helm-org-rifle | /home/gaston/.emacs.d/.local/straight/build/pyvenv | /home/gaston/.emacs.d/.local/straight/build/highlight-indentation | /home/gaston/.emacs.d/.local/straight/build/elpy | /home/gaston/.emacs.d/.local/straight/build/company | /home/gaston/.emacs.d/.local/straight/build/ripgrep | /home/gaston/.emacs.d/.local/straight/build/projectile-ripgrep | /home/gaston/.emacs.d/.local/straight/build/helm-rg | /home/gaston/.emacs.d/.local/straight/build/wgrep | /home/gaston/.emacs.d/.local/straight/build/transient | /home/gaston/.emacs.d/.local/straight/build/rg | /home/gaston/.emacs.d/.local/straight/build/yasnippet-snippets | /home/gaston/.emacs.d/.local/straight/build/yasnippet | /home/gaston/.emacs.d/.local/straight/build/engine-mode | /home/gaston/.emacs.d/.local/straight/build/names | /home/gaston/.emacs.d/.local/straight/build/org-fs-tree | /home/gaston/.emacs.d/.local/straight/build/org-writers-room | /home/gaston/.emacs.d/.local/straight/build/ob-rust | /home/gaston/.emacs.d/.local/straight/build/zotxt-emacs | /home/gaston/.emacs.d/.local/straight/build/pdf-tools | /home/gaston/.emacs.d/.local/straight/build/key-chord | /home/gaston/.emacs.d/.local/straight/build/hydra | /home/gaston/.emacs.d/.local/straight/build/ivy | /home/gaston/.emacs.d/.local/straight/build/htmlize | /home/gaston/.emacs.d/.local/straight/build/org-ref | /home/gaston/.emacs.d/.local/straight/build/org-wiki | /home/gaston/.emacs.d/.local/straight/build/org-board | /home/gaston/.emacs.d/.local/straight/build/enlive | /home/gaston/.emacs.d/.local/straight/build/org-books | /home/gaston/.emacs.d/.local/straight/build/org-protocol-capture-html | /home/gaston/.emacs.d/.local/straight/build/font-lock+ | /home/gaston/.emacs.d/.local/straight/build/tao-theme | /home/gaston/.emacs.d/.local/straight/build/doom-themes | /home/gaston/.emacs.d/.local/straight/build/org-download | /home/gaston/.emacs.d/.local/straight/build/tablist | /home/gaston/.emacs.d/.local/straight/build/navigel | /home/gaston/.emacs.d/.local/straight/build/libmpdel | /home/gaston/.emacs.d/.local/straight/build/mpdel | /home/gaston/.emacs.d/.local/straight/build/drag-stuff | /home/gaston/.emacs.d/.local/straight/build/yankpad | /home/gaston/.emacs.d/.local/straight/build/sly | /home/gaston/.emacs.d/.local/straight/build/ess/obsolete/ | /home/gaston/.emacs.d/.local/straight/build/ess/ | /home/gaston/.emacs.d/.local/straight/build/julia-mode | /home/gaston/.emacs.d/.local/straight/build/ess | /home/gaston/.emacs.d/.local/straight/build/matlab-mode | /home/gaston/.emacs.d/.local/straight/build/avy | /home/gaston/.emacs.d/.local/straight/build/ace-window | /home/gaston/.emacs.d/.local/straight/build/paredit | /home/gaston/.emacs.d/.local/straight/build/eval-in-repl | /home/gaston/.emacs.d/.local/straight/build/org-babel-eval-in-repl | /home/gaston/.emacs.d/.local/straight/build/let-alist | /home/gaston/.emacs.d/.local/straight/build/biblio-core | /home/gaston/.emacs.d/.local/straight/build/biblio | /home/gaston/.emacs.d/.local/straight/build/parsebib | /home/gaston/.emacs.d/.local/straight/build/helm-bibtex | /home/gaston/.emacs.d/.local/straight/build/org-cliplink | /home/gaston/.emacs.d/.local/straight/build/org-brain | /home/gaston/.emacs.d/.local/straight/build/ts | /home/gaston/.emacs.d/.local/straight/build/org-super-agenda | /home/gaston/.emacs.d/.local/straight/build/org-bullets | /home/gaston/.emacs.d/.local/straight/build/org | /home/gaston/.emacs.d/.local/straight/build/org-noter | /home/gaston/.emacs.d/.local/straight/build/toc-org | /home/gaston/.emacs.d/.local/straight/build/evil-org | /home/gaston/.emacs.d/.local/straight/build/gnus-desktop-notify | /home/gaston/.emacs.d/.local/straight/build/poet-theme | /home/gaston/.emacs.d/.local/straight/build/lsp-ui | /home/gaston/.emacs.d/.local/straight/build/haskell-mode | /home/gaston/.emacs.d/.local/straight/build/lv | /home/gaston/.emacs.d/.local/straight/build/markdown-mode | /home/gaston/.emacs.d/.local/straight/build/spinner | /home/gaston/.emacs.d/.local/straight/build/ht | /home/gaston/.emacs.d/.local/straight/build/lsp-mode | /home/gaston/.emacs.d/.local/straight/build/lsp-haskell | /home/gaston/.emacs.d/.local/straight/build/helm-core | /home/gaston/.emacs.d/.local/straight/build/popup | /home/gaston/.emacs.d/.local/straight/build/helm | /home/gaston/.emacs.d/.local/straight/build/helm-gtags | /home/gaston/.emacs.d/.local/straight/build/ggtags | /home/gaston/.emacs.d/.local/straight/build/irony-eldoc | /home/gaston/.emacs.d/.local/straight/build/irony | /home/gaston/.emacs.d/.local/straight/build/julia-repl | /home/gaston/.emacs.d/.local/straight/build/annalist | /home/gaston/.emacs.d/.local/straight/build/goto-chg | /home/gaston/.emacs.d/.local/straight/build/evil | /home/gaston/.emacs.d/.local/straight/build/evil-collection | /home/gaston/.emacs.d/.local/straight/build/fountain-mode | /home/gaston/.emacs.d/.local/straight/build/log4e | /home/gaston/.emacs.d/.local/straight/build/gntp | /home/gaston/.emacs.d/.local/straight/build/alert | /home/gaston/.emacs.d/.local/straight/build/org-wild-notifier | /home/gaston/.emacs.d/.local/straight/build/faceup | /home/gaston/.emacs.d/.local/straight/build/racket-mode | /home/gaston/.emacs.d/.local/straight/build/autothemer | /home/gaston/.emacs.d/.local/straight/build/kaolin-themes | /home/gaston/.emacs.d/.local/straight/build/ranger | /home/gaston/.emacs.d/.local/straight/build/shrink-path | /home/gaston/.emacs.d/.local/straight/build/doom-modeline | /home/gaston/.emacs.d/.local/straight/build/which-key | /home/gaston/.emacs.d/.local/straight/build/general | /home/gaston/.emacs.d/.local/straight/build/epl | /home/gaston/.emacs.d/.local/straight/build/pkg-info | /home/gaston/.emacs.d/.local/straight/build/projectile | /home/gaston/.emacs.d/.local/straight/build/xclip | /home/gaston/.emacs.d/.local/straight/build/ws-butler | /home/gaston/.emacs.d/.local/straight/build/undo-tree | /home/gaston/.emacs.d/.local/straight/build/so-long | /home/gaston/.emacs.d/.local/straight/build/smartparens | /home/gaston/.emacs.d/.local/straight/build/pcre2el | /home/gaston/.emacs.d/.local/straight/build/loop | /home/gaston/.emacs.d/.local/straight/build/elisp-refs | /home/gaston/.emacs.d/.local/straight/build/f | /home/gaston/.emacs.d/.local/straight/build/s | /home/gaston/.emacs.d/.local/straight/build/dash-functional | /home/gaston/.emacs.d/.local/straight/build/dash | /home/gaston/.emacs.d/.local/straight/build/helpful | /home/gaston/.emacs.d/.local/straight/build/dtrt-indent | /home/gaston/.emacs.d/.local/straight/build/better-jumper | /home/gaston/.emacs.d/.local/straight/build/restart-emacs | /home/gaston/.emacs.d/.local/straight/build/rainbow-delimiters | /home/gaston/.emacs.d/.local/straight/build/parent-mode | /home/gaston/.emacs.d/.local/straight/build/highlight-numbers | /home/gaston/.emacs.d/.local/straight/build/hide-mode-line | /home/gaston/.emacs.d/.local/straight/build/memoize | /home/gaston/.emacs.d/.local/straight/build/all-the-icons | /home/gaston/.emacs.d/.local/straight/build/auto-minor-mode | /home/gaston/.emacs.d/.local/straight/build/dotenv-mode | /home/gaston/.emacs.d/.local/straight/build/gcmh | /home/gaston/.emacs.d/.local/straight/build/async | /home/gaston/.emacs.d/.local/straight/build/bind-key | /home/gaston/.emacs.d/.local/straight/build/use-package | /home/gaston/.emacs.d/.local/straight/build/straight | /home/gaston/.emacs.d/.local/elpa/abyss-theme-20170808.1345 | /home/gaston/.emacs.d/.local/elpa/company-box-20190311.1745 | /home/gaston/.emacs.d/.local/elpa/company-coq-20191025.2219 | /home/gaston/.emacs.d/.local/elpa/company-math-20190507.2006 | /home/gaston/.emacs.d/.local/elpa/company-20191127.16 | /home/gaston/.emacs.d/.local/elpa/dash-functional-20191109.1327 | /home/gaston/.emacs.d/.local/elpa/doom-modeline-20191202.1710 | /home/gaston/.emacs.d/.local/elpa/all-the-icons-20191127.1123 | /home/gaston/.emacs.d/.local/elpa/flymake-racket-20180912.109 | /home/gaston/.emacs.d/.local/elpa/flymake-shellcheck-20181214.24 | /home/gaston/.emacs.d/.local/elpa/insert-kaomoji-20190701.1823 | /home/gaston/.emacs.d/.local/elpa/kaomoji-20171227.440 | /home/gaston/.emacs.d/.local/elpa/helm-core-20191208.747 | /home/gaston/.emacs.d/.local/elpa/async-20191030.2138 | /home/gaston/.emacs.d/.local/elpa/math-symbol-lists-20190605.2058 | /home/gaston/.emacs.d/.local/elpa/memoize-20191126.2002 | /home/gaston/.emacs.d/.local/elpa/mood-line-20191101.1955 | /home/gaston/.emacs.d/.local/elpa/mutt-mode-20191102.2330 | /home/gaston/.emacs.d/.local/elpa/notmuch-20191203.1143 | /home/gaston/.emacs.d/.local/elpa/ox-hugo-20191204.1552 | /home/gaston/.emacs.d/.local/elpa/racket-mode-20191204.205 | /home/gaston/.emacs.d/.local/elpa/faceup-20170925.1946 | /home/gaston/.emacs.d/.local/elpa/shrink-path-20190208.1335 | /home/gaston/.emacs.d/.local/elpa/vimrc-mode-20181116.1919 | /home/gaston/.emacs.d/.local/elpa/workgroups2-20141102.1922 | /home/gaston/.emacs.d/.local/elpa/f-20191110.1357 | /home/gaston/.emacs.d/.local/elpa/s-20180406.808 | /home/gaston/.emacs.d/.local/elpa/anaphora-20180618.2200 | /home/gaston/.emacs.d/.local/elpa/dash-20191109.1327 | /home/gaston/.emacs.d/.local/elpa/yasnippet-20191030.1331 | /home/gaston/.emacs.d/core/ | /home/gaston/.emacs.d/core | /usr/share/emacs/26.3/site-lisp | /usr/share/emacs/site-lisp | /usr/share/emacs/26.3/lisp | /usr/share/emacs/26.3/lisp/vc | /usr/share/emacs/26.3/lisp/url | /usr/share/emacs/26.3/lisp/textmodes | /usr/share/emacs/26.3/lisp/progmodes | /usr/share/emacs/26.3/lisp/play | /usr/share/emacs/26.3/lisp/nxml | /usr/share/emacs/26.3/lisp/net | /usr/share/emacs/26.3/lisp/mh-e | /usr/share/emacs/26.3/lisp/mail | /usr/share/emacs/26.3/lisp/leim | /usr/share/emacs/26.3/lisp/language | /usr/share/emacs/26.3/lisp/international | /usr/share/emacs/26.3/lisp/image | /usr/share/emacs/26.3/lisp/gnus | /usr/share/emacs/26.3/lisp/eshell | /usr/share/emacs/26.3/lisp/erc | /usr/share/emacs/26.3/lisp/emulation | /usr/share/emacs/26.3/lisp/emacs-lisp | /usr/share/emacs/26.3/lisp/cedet | /usr/share/emacs/26.3/lisp/calendar | /usr/share/emacs/26.3/lisp/calc | /usr/share/emacs/26.3/lisp/obsolete |
 
 * installed package list and ref
 ** org-wiki

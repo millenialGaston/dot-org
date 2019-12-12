@@ -975,7 +975,7 @@ else
 ** nvim
 *** plug
 #+name:plug
-#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
+#+begin_src bash :tangle ~/.config/nvim/init.vim
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
   silent !curl -fLo ~/.nvim/autoload/plug.vim --create-dirs
         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -993,7 +993,7 @@ Plug 'ocaml/vim-ocaml'
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'sbdchd/neoformat'
-
+Plug 'zhou13/vim-easyescape'
 Plug 'zhou13/vim-easyescape'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
@@ -1023,7 +1023,7 @@ call plug#end()
 
 *** ocaml
 #+name:ocaml
-#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
+#+begin_src bash :tangle ~/.config/nvim/init.vim
 
 let g:neoformat_ocaml_ocamlformat = {
             \ 'exe': 'ocamlformat',
@@ -1085,9 +1085,9 @@ endif
 
 *** visual
 #+name:visual
-#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
-nnoremap gev :e $MYVIMRC<CR>
-nnoremap gsv :so $MYVIMRC<CR>
+#+begin_src bash :tangle ~/.config/nvim/init.vim
+nnoremap gev :e $MYBASH<CR>
+nnoremap gsv :so $MYBASH<CR>
 set clipboard=unnamedplus
 
 augroup Rc
@@ -1137,7 +1137,7 @@ set wrap
 
 *** shortcuts
 #+name:shortcuts
-#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
+#+begin_src bash :tangle ~/.config/nvim/init.vim
 autocmd Rc BufEnter * EnableStripWhitespaceOnSave
 nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
@@ -1147,7 +1147,7 @@ nnoremap <esc><esc> :nohlsearch<cr>
 nnoremap Y y$
 
 let g:easyescape_chars = { "j": 1, "k": 1 }
-let g:easyescape_timeout = 30
+let g:easyescape_timeout = 90
 cnoremap jk <ESC>
 cnoremap kj <ESC>
 
@@ -1176,7 +1176,7 @@ inoremap <c-x><c-s> <Esc>:w<CR>
 
 *** fzf
 #+name:fzf
-#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
+#+begin_src bash :tangle ~/.config/nvim/init.vim
 imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
@@ -1220,7 +1220,7 @@ let g:fzf_colors =  {
 #+end_src
 
 #+name:which-key
-#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
+#+begin_src bash :tangle ~/.config/nvim/init.vim
 autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map')
 let g:mapleader = "\<Space>"
 let g:maplocalleader = ','
@@ -1275,7 +1275,7 @@ let g:which_key_map['w'] = {
 
 *** plugin settings
 #+name:plugin-settings
-#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
+#+begin_src bash :tangle ~/.config/nvim/init.vim
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#auto_complete_start_length = 1
 let g:current_line_whitespace_disabled_soft=1
@@ -1298,7 +1298,7 @@ highlight VertSplit   cterm=none ctermfg=240 ctermbg=240
 #+end_src
 *** commands
 #+name:commands
-#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
+#+begin_src bash :tangle ~/.config/nvim/init.vim
 command! -bang -nargs=? -complete=dir Files
       \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
@@ -1314,7 +1314,7 @@ command! -bang Colors
 #+end_src
 *** functions
 #+name:functions
-#+begin_src vimrc :tangle ~/.config/nvim/init.vim :comments link
+#+begin_src bash :tangle ~/.config/nvim/init.vim
 function! s:fzf_statusline()
   highlight fzf1 ctermfg=161 ctermbg=251
   highlight fzf2 ctermfg=23 ctermbg=251

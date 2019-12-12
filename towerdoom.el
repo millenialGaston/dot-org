@@ -7,6 +7,19 @@
 (setq pr-ps-printer-alist '((lpss "lp" nil "-d" "HLL2390DW")))
 (pr-update-menus t)
 
+(setq bibtex-completion-format-citation-functions
+      '((org-mode . bibtex-completion-format-citation-ebib)
+        (latex-mode    . bibtex-completion-format-citation-cite)
+        (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
+        (default       . bibtex-completion-format-citation-default)))
+
+(setq bibtex-completion-display-formats
+      '((article       . "${author:36} ${title:*} ${journal:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
+        (inbook        . "${author:36} ${title:*} Chapter ${chapter:32} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
+        (incollection  . "${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
+        (inproceedings . "${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
+        (t             . "${author:36} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")))
+
 (bind-key (kbd "M-y") 'helm-show-kill-ring)
 (bind-key (kbd "M-o") 'company-complete)
 
@@ -56,19 +69,6 @@
 (tempo-define-template "attr-org"
                        '("#+ATTR_ORG: :width 400")
                        "<o")
-
-(setq bibtex-completion-format-citation-functions
-      '((org-mode . bibtex-completion-format-citation-ebib)
-        (latex-mode    . bibtex-completion-format-citation-cite)
-        (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
-        (default       . bibtex-completion-format-citation-default)))
-
-(setq bibtex-completion-display-formats
-      '((article       . "${author:36} ${title:*} ${journal:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
-        (inbook        . "${author:36} ${title:*} Chapter ${chapter:32} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
-        (incollection  . "${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
-        (inproceedings . "${author:36} ${title:*} ${booktitle:40} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")
-        (t             . "${author:36} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:3}")))
 
 (run-with-idle-timer 20 t 'evil-normal-state)
 
@@ -271,20 +271,6 @@
    (scheme . t)
    (ditaa .t)))
 
-(setq ispell-program-name (executable-find "hunspell")
-      ispell-dictionary "en_US")
-(bind-key "C-c I"
-          (lambda ()
-            (interactive)
-            (ispell-change-dictionary "fr_CA")
-            (flyspell-buffer)))
-
-(bind-key "C-c E"
-          (lambda ()
-            (interactive)
-            (ispell-change-dictionary "en_GB")
-            (flyspell-buffer)))
-
 (set-default-font "Iosevka Nerd Font 12")
 (set-face-attribute 'default nil :family "Iosevka Nerd Font" :height 130)
 (set-face-attribute 'fixed-pitch nil :family "Iosevka Nerd Font")
@@ -324,6 +310,48 @@
       :hook (after-init . doom-modeline-mode))
 (doom-modeline 1)
 (setq doom-modeline-major-mode-icon t)
+
+(setq org-hide-emphasis-markers t)
+(font-lock-add-keywords 'org-mode
+                        '(("^ *\\([-]\\) "
+                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+(use-package org-bullets
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+(let* ((variable-tuple
+        (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+              ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+              ((x-list-fonts "Verdana")         '(:font "Verdana"))
+              ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+              (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+       (base-font-color     (face-foreground 'default nil 'default))
+       (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+  (custom-theme-set-faces
+   'user
+   `(org-level-8 ((t (,@headline ,@variable-tuple))))
+   `(org-level-7 ((t (,@headline ,@variable-tuple))))
+   `(org-level-6 ((t (,@headline ,@variable-tuple))))
+   `(org-level-5 ((t (,@headline ,@variable-tuple))))
+   `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+   `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+   `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+   `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
+   `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
+
+(setq ispell-program-name (executable-find "hunspell")
+      ispell-dictionary "en_US")
+(bind-key "C-c I"
+          (lambda ()
+            (interactive)
+            (ispell-change-dictionary "fr_CA")
+            (flyspell-buffer)))
+
+(bind-key "C-c E"
+          (lambda ()
+            (interactive)
+            (ispell-change-dictionary "en_GB")
+            (flyspell-buffer)))
 
 (setq reftex-default-bibliography '("~/academic/biblio/master-bib.bib"))
 
