@@ -828,7 +828,7 @@ example:
 #+end_src
 *** inprog haskell
 :PROPERTIES:
-:header-args: :tangle yes
+:header-args: :tangle no
 :END:
 #+begin_src elisp
 (require 'lsp)
@@ -874,7 +874,7 @@ example:
    ;; (erlang . t)
    (js . t)
    (C . t)
-   (haskell . t)
+   ;;(haskell . t)
    (makefile .t)
    (scheme . t)
    (ditaa .t)))

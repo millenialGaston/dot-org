@@ -245,9 +245,9 @@
 (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
 
 (require 'lsp)
-(require 'lsp-haskell)
 (require 'lsp-ui)
-(add-hook 'haskell-mode-hook #'lsp)
+;;(require 'lsp-haskell)
+;;(add-hook 'haskell-mode-hook #'lsp)
 (add-hook 'lsp-mode-hook 'lsp-ui-mode)
 
 ;; (add-to-list 'load-path
@@ -266,7 +266,7 @@
    ;; (erlang . t)
    (js . t)
    (C . t)
-   (haskell . t)
+   ;;(haskell . t)
    (makefile .t)
    (scheme . t)
    (ditaa .t)))

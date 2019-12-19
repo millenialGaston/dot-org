@@ -1,7 +1,6 @@
 #+title: arch/os stuff
 #+author: frederic.boilea
 #+html_head: <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
-quel bon met
 * myconf
 :PROPERTIES:
 :header-args: :tangle :mkdirp yes
@@ -536,6 +535,28 @@ set -g @resurrect-strategy-nvim 'session'
 run -b '~/.tmux/plugins/tpm/tpm'
 #+end_src
 
+** aliases                                                          :stable:
+:PROPERTIES:
+:header-args: :tangle ~/.bashrc.aliases :comments link
+:END:
+#+BEGIN_SRC shell
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+
+alias c='clear'
+alias e='emacsclient -create-frame --alternate-editor=""'
+alias cp='cp -i'
+alias mv='mv -i'
+alias j='jobs'
+alias o='xdg-open'
+alias r='hunter'
+alias tma='tmux attach-session -t'
+alias m='pulsemixer'
+alias n='nvim'
+
+alias weather='curl wttr.in/Montreal'
+#+END_SRC
+
 ** mpd                                                              :stable:
 :PROPERTIES:
 :header-args: :tangle ~/.config/mpd/mpd.conf :comments link
@@ -910,31 +931,6 @@ blur-background-frame = true;
 no-fading-openclose = true;
 opacity-rule = [ "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'" ];
 
-#+END_SRC
-
-** aliases                                                          :stable:
-:PROPERTIES:
-:header-args: :tangle ~/.bashrc.aliases :comments link
-:END:
-#+BEGIN_SRC shell
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'
-alias pacman='sudo pacman'
-alias journalctl='sudo journalctl'
-alias systemctl='sudo systemctl'
-
-alias c='clear'
-alias e='emacsclient -create-frame --alternate-editor=""'
-alias cp='cp -i'
-alias mv='mv -i'
-alias j='jobs'
-alias o='xdg-open'
-alias r='hunter'
-alias tma='tmux attach-session -t'
-alias m='pulsemixer'
-alias n='nvim'
-
-alias weather='curl wttr.in/Montreal'
 #+END_SRC
 
 ** ssh                                                               :notangle:
