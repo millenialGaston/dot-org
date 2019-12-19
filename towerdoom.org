@@ -2,7 +2,6 @@
 #+AUTHOR: Frederic Boileau
 #+email:frederic.boileau@protonmail.com
 #+PROPERTY: ATTACH_DIR .
-,#+STARTUP:  inlineimages lognoteclock-out hideblocks
 #+ATTR_ORG: :width 200/250/300/400/500/600
 #+TODO: always(a) fixme(r) next(n) todo(t) inprog(p) stable(d) idea(i) project(j) wait(w) | broken(b)
 
@@ -855,32 +854,6 @@ example:
   (require 'org-babel-eval-in-repl))
 (require 'eval-in-repl)
   #+END_SRC
-
-**** babel languages
-#+BEGIN_SRC elisp
-;; (add-to-list 'load-path
-             ;; "/home/sole/.opam/default/share/emacs/site-lisp/")
-;; (require 'ocp-indent)
-(setq org-ditaa-jar-path "/usr/share/java/ditaa/ditaa-0.11.jar")
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (python . t)
-   (ocaml . t)
-   (julia . t)
-   (racket . t)
-   (lisp . t)
-   (shell . t)
-   ;; (erlang . t)
-   (js . t)
-   (C . t)
-   ;;(haskell . t)
-   (makefile .t)
-   (scheme . t)
-   (ditaa .t)))
-#+END_SRC
-
-#+RESULTS:
 
 **** sly in org                                                 :notangle:
 :PROPERTIES:
