@@ -2,7 +2,7 @@
 #+AUTHOR: Frederic Boileau
 #+email:frederic.boileau@protonmail.com
 #+PROPERTY: ATTACH_DIR .
-#+STARTUP:  inlineimages lognoteclock-out hideblocks
+,#+STARTUP:  inlineimages lognoteclock-out hideblocks
 #+ATTR_ORG: :width 200/250/300/400/500/600
 #+TODO: always(a) fixme(r) next(n) todo(t) inprog(p) stable(d) idea(i) project(j) wait(w) | broken(b)
 

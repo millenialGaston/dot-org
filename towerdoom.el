@@ -254,22 +254,6 @@
              ;; "/home/sole/.opam/default/share/emacs/site-lisp/")
 ;; (require 'ocp-indent)
 (setq org-ditaa-jar-path "/usr/share/java/ditaa/ditaa-0.11.jar")
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (python . t)
-   (ocaml . t)
-   (julia . t)
-   (racket . t)
-   (lisp . t)
-   (shell . t)
-   ;; (erlang . t)
-   (js . t)
-   (C . t)
-   ;;(haskell . t)
-   (makefile .t)
-   (scheme . t)
-   (ditaa .t)))
 
 (set-default-font "Iosevka Nerd Font 12")
 (set-face-attribute 'default nil :family "Iosevka Nerd Font" :height 130)
