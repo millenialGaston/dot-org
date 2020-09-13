@@ -16,9 +16,6 @@
 #+BEGIN_SRC conf
 # i3 config file for frederic boileau
 #
-exec source ~/.profile
-exec source ~/.bashrc.aliases
-
 set $mod Mod4
 for_window [class=".*"] border pixel 4
 font pango:monospace 10
@@ -27,16 +24,8 @@ gaps inner 15
 gaps outer 15
 set $term termite
 set $shell /usr/bin/zsh
-#set $browser brave
-exec_always feh --bg-scale "/home/gaston/pics/wallpapers/blue-and-dark-sky-by-mark-kirkpatrick-3840×2160.jpg"
 exec xmodmap ~/.xmodmap
 
-
-exec source ~/.bashrc
-exec source ~/.zshrc
-exec source ~/.profile
-
-exec unclutter
 
 bindsym $mod+Tab workspace next
 bindsym $mod+Shift+c reload
